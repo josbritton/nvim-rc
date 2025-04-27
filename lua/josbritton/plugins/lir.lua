@@ -17,6 +17,8 @@ local conf = {
         })
 
         local actions = require("lir.actions")
+        local noop = function() end
+
         require("lir").setup({
             show_hidden_files = true,
             ignore = {},
@@ -33,6 +35,18 @@ local conf = {
                 ["R"] = actions.rename,
                 ["Y"] = actions.yank_path,
                 ["D"] = actions.delete,
+
+                -- disable horizontal line movements
+                ["h"] = noop,
+                ["l"] = noop,
+                ["w"] = noop,
+                ["b"] = noop,
+                ["e"] = noop,
+                ["0"] = noop,
+                ["^"] = noop,
+                ["$"] = noop,
+                ["t"] = noop,
+                ["f"] = noop,
             },
             hide_cursor = true,
         })
