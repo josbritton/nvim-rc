@@ -1,7 +1,7 @@
---- @class josbritton.Statusline
+--- @class Statusline
 local M = {}
 
---- @class (exact) josbritton.StatusObj
+--- @class (exact) Statusline.StatusObj
 --- @field added? integer
 --- @field removed? integer
 --- @field changed? integer
@@ -138,7 +138,7 @@ end
 ---@type boolean
 local gitsigns_color_enabled = false
 
----@param status josbritton.StatusObj
+---@param status Statusline.StatusObj
 ---@param active 0|1
 ---@return string
 local gitsigns_formatter = function(status, active)
@@ -176,7 +176,7 @@ end
 ---@param active 0|1
 ---@return string
 function M.hunks(active)
-    ---@type josbritton.StatusObj
+    ---@type Statusline.StatusObj
     local gs_status_dict = vim.b.gitsigns_status_dict
     if gs_status_dict then
         local status = vim.b.gitsigns_head ---@type string?
@@ -304,7 +304,7 @@ local function pad(x)
     return "%( " .. x .. " %)"
 end
 
---- @type josbritton.Statusline
+--- @type Statusline
 local F = setmetatable({}, {
     ---@param t table
     ---@param name string

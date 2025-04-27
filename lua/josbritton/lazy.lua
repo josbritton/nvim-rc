@@ -14,7 +14,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup("josbritton.plugins", {
+require("lazy").setup(PLUGINS, {
     install = { colorscheme = { "juliana" }, missing = false },
     checker = { enabled = true, notify = false },
     change_detection = { notify = false },
