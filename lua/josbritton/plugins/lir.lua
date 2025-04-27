@@ -139,14 +139,12 @@ conf["init"] = function()
         callback = function(ev)
             local res = (vim.uv or vim.loop).fs_stat(vim.api.nvim_buf_get_name(ev.buf))
             if res and res.type == "directory" then
-                local lazy = require("lazy")
-
                 local plugin_name = conf.name
                 local slash = conf[1]:find("/", 1, true)
                 if slash then
                     plugin_name = conf.name or conf[1]:sub(slash + 1)
                 end
-                lazy.load({ plugins = plugin_name })
+                require("lazy").load({ plugins = { plugin_name } })
 
                 vim.api.nvim_del_autocmd(ev.id)
                 vim.api.nvim_del_augroup_by_id(ev.group)
