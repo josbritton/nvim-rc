@@ -1,3 +1,6 @@
+-- experimental Lua module loader
+vim.loader.enable()
+
 Notify = require("josbritton.notify")
 -- start config
 require("josbritton.options")
