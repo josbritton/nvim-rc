@@ -2,8 +2,6 @@ local conf = {
     "tamago324/lir-git-status.nvim",
     dependencies = {
         "JosBritton/lir.nvim",
-        "nvim-tree/nvim-web-devicons",
-        "nvim-lua/plenary.nvim",
     },
     lazy = true,
     keys = {
@@ -87,4 +85,8 @@ conf["init"] = function()
     })
 end
 
-return conf
+return {
+    conf,
+    { "nvim-lua/plenary.nvim" },
+    { "nvim-tree/nvim-web-devicons" },
+}
