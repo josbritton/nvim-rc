@@ -137,3 +137,12 @@ vim.api.nvim_create_autocmd("User", {
         end)
     end,
 })
+
+vim.api.nvim_create_autocmd("FileChangedShellPost", {
+    callback = function()
+        Notify.warn(
+            "File changed on disk. Buffer reloaded.",
+            { title = "Buffer Reloaded" }
+        )
+    end,
+})

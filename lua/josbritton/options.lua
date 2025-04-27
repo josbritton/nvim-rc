@@ -130,6 +130,7 @@ vim.opt.list = true
 ---@diagnostic disable-next-line: missing-fields
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
+vim.o.autoread = true
 -- no need to do syntax highlighting past this many cols
 vim.o.synmaxcol = 400
 
