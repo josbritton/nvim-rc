@@ -16,10 +16,19 @@ local conf = {
             },
         })
 
+        local lir = require("lir")
         local actions = require("lir.actions")
         local noop = function() end
 
-        require("lir").setup({
+        local yank_rel_filename = function()
+            local ctx = lir.get_context()
+            local path = (Statusline.bufname() or "") .. ctx:current_value()
+            vim.fn.setreg(vim.v.register, path)
+            print("Yank file: " .. path)
+        end
+
+        ---@diagnostic disable-next-line: missing-fields
+        lir.setup({
             show_hidden_files = true,
             ignore = {},
             devicons = {
@@ -35,6 +44,7 @@ local conf = {
                 ["R"] = actions.rename,
                 ["Y"] = actions.yank_path,
                 ["D"] = actions.delete,
+                ["yy"] = yank_rel_filename,
 
                 -- disable horizontal line movements
                 ["h"] = noop,
