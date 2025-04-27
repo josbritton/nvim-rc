@@ -123,7 +123,35 @@ return {
                     and client.server_capabilities.inlayHintProvider
                     and vim.lsp.inlay_hint
                 then
-                    vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+                    local settings = {
+                        rust_analyzer = {
+                            enabled = false,
+                        },
+                    }
+
+                    vim.schedule(function()
+                        -- consider all clients attached to the buffer, if any do not want inlay
+                        -- hints then do not enable it
+                        local enabled_on_attach = true
+                        for _i, c in
+                            ipairs(
+                                vim.tbl_values(
+                                    util.get_config_by_ft(vim.bo[ev.buf].filetype)
+                                )
+                            )
+                        do
+                            if
+                                (settings[c.name] or {}).enabled ~= nil
+                                and (settings[c.name] or {}).enabled == false
+                            then
+                                enabled_on_attach = false
+                                break
+                            end
+                        end
+
+                        vim.lsp.inlay_hint.enable(enabled_on_attach, { bufnr = ev.buf })
+                    end)
+
                     nmap("<leader>th", function()
                         vim.lsp.inlay_hint.enable(
                             not vim.lsp.inlay_hint.is_enabled({ bufnr = ev.buf }),
