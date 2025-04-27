@@ -131,6 +131,9 @@ vim.keymap.set("n", "<C-Space>", "<Cmd>silent !scratchtmux<CR>")
 -- vim.keymap.set("n", "<leader>k", "<Cmd>lnext<CR>zz", { desc = "Location list nav next"})
 -- vim.keymap.set("n", "<leader>j", "<Cmd>lprev<CR>zz", { desc = "Location list nav previous"})
 
+vim.keymap.set("n", "<leader>S", [[:%s/]], { desc = "Enter substitute command" })
+vim.keymap.set("x", "<leader>S", [[:s/]], { desc = "Enter substitute command" })
+
 vim.keymap.set(
     "n",
     "<leader>s",
