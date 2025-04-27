@@ -25,7 +25,7 @@ vim.api.nvim_create_autocmd({ "BufReadPre" }, {
                             return "bigfile"
                         end
                         -- average line length (useful for minified files)
-                        local bigfile_line_length = 1000
+                        local bigfile_line_length = vim.o.synmaxcol or 400
                         local lines = vim.api.nvim_buf_line_count(buf)
                         return (size - lines) / lines > bigfile_line_length and "bigfile"
                             or nil
