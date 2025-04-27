@@ -18,6 +18,7 @@ local M = {
             selection_bg = "#3f4750",
             bg2 = "#303841",
             bg3 = "#2e353e",
+            bg4 = "#2e353e",
             diff_text = "#373f48",
             diff_add = "#41525a",
             diff_change = "#585249",
@@ -153,7 +154,7 @@ function M:load()
     hl("SpellLocal", { sp = C.cyan2, undercurl = true })
     hl("SpellRare", { sp = C.magenta, undercurl = true })
     hl("StatusLine", { fg = C.fg2, bg = C.bg1 })
-    hl("StatusLineNC", { fg = C.fg2, bg = C.bg3 })
+    hl("StatusLineNC", { fg = C.fg3, bg = C.bg4 })
     hl("WinBar", { link = "StatusLine" })
     hl("WinBarNC", { link = "StatusLine" })
     hl("StatusBlack", { fg = C.fg3, bg = C.bg1 })
