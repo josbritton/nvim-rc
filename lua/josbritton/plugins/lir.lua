@@ -41,7 +41,8 @@ local conf = {
         })
 
         vim.keymap.set("n", "<leader>pv", function()
-            if vim.bo.filetype == "lir" then
+            local ft = vim.bo.filetype
+            if ft == "lir" or ft == "fugitive" then
                 return
             end
 
