@@ -202,7 +202,7 @@ vim.keymap.set("x", "<leader>s", function()
         return
     end
 
-    local max_subst_len = 50
+    local max_subst_len = 200
     if text_len > max_subst_len then
         local s = ("Substitution cancelled.\nMaximum combined substitution \z
             + replacement payload length\nis set to `%s`, while requested length \z
