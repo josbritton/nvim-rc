@@ -374,6 +374,9 @@ return {
                 },
                 settings = {
                     ["rust-analyzer"] = {
+                        check = {
+                            command = "clippy", -- Important
+                        },
                         inlayHints = {
                             -- maxLength = 25,
                             -- bindingModeHints = {
