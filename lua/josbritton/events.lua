@@ -127,7 +127,6 @@ vim.api.nvim_create_autocmd("User", {
                     "nvim-colorizer.lua",
                     "spaceless.nvim",
                     "gitsigns.nvim",
-                    "blink.pairs",
                     "nvim-lint",
                     "vim-rhubarb",
                     "conform.nvim",
