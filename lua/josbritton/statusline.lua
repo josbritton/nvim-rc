@@ -71,17 +71,23 @@ end
 
 --- @param active 0|1
 --- @return string
-local function lsp_name(active)
-    local names = {} ---@type string[]
+local function lsp_text(active)
+    local res = {} ---@type string[]
     for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
-        names[#names + 1] = client.name
+        local name = client.name
+        local rust_status = vim.g.rust_analyzer_server_status
+        if name == "rust_analyzer" and rust_status then
+            res[#res + 1] = ("%s: %s"):format(name, rust_status)
+        else
+            res[#res + 1] = name
+        end
     end
 
-    if #names == 0 then
+    if #res == 0 then
         return ""
     end
 
-    return hl("LspName", active) .. table.concat(names, ",")
+    return hl("LspName", active) .. table.concat(res, ",")
 end
 
 --- @param active 0|1
@@ -125,7 +131,7 @@ end
 function M.lsp_status(active)
     local status = {} ---@type string[]
 
-    status[#status + 1] = lsp_name(active)
+    status[#status + 1] = lsp_text(active)
     status[#status + 1] = diagnostics(active)
 
     if vim.g.metals_status then
