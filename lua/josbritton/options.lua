@@ -147,6 +147,12 @@ vim.filetype.add({
     },
 })
 
+vim.diagnostic.config({
+    virtual_text = nil,
+    severity_sort = true, -- why is this not set by default?
+    update_in_insert = false,
+})
+
 -- remove builtin
 vim.g.loaded_gzip = 1
 vim.g.loaded_zip = 1
