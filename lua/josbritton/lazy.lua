@@ -15,7 +15,7 @@ end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup(PLUGINS, {
-    install = { colorscheme = { "juliana" }, missing = false },
+    install = { missing = false },
     checker = { enabled = true, notify = false },
     change_detection = { notify = false },
     rocks = { enabled = false },
