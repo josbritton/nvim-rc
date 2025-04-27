@@ -27,6 +27,45 @@ local conf = {
             print("Yank file: " .. path)
         end
 
+        ---@param stage boolean
+        local function git_stage_unstage(stage)
+            local bufnr = vim.fn.bufnr("%")
+
+            local ctx = lir.get_context()
+            local path = ctx.dir .. ctx:current_value()
+            local short_path = (Statusline.bufname() or "") .. ctx:current_value()
+
+            local arg = stage and { "git", "add" } or { "git", "restore", "--staged" }
+            table.insert(arg, path)
+
+            vim.system(arg, { text = true }, function(res)
+                if res.code > 0 then
+                    Notify.error(
+                        "Git error\n" .. (res.stderr or ""),
+                        { title = "Git error" }
+                    )
+                    return
+                end
+
+                local buf_call = vim.in_fast_event()
+                        and vim.schedule_wrap(vim.api.nvim_buf_call)
+                    or vim.api.nvim_buf_call
+
+                -- update lir buffer to show updated git status
+                buf_call(bufnr, function()
+                    vim.cmd(":edit")
+                end)
+
+                print((stage and "Stage path: " or "Unstage path: ") .. short_path)
+            end)
+        end
+        local stage_path = function()
+            git_stage_unstage(true)
+        end
+        local unstage_path = function()
+            git_stage_unstage(false)
+        end
+
         ---@diagnostic disable-next-line: missing-fields
         lir.setup({
             show_hidden_files = true,
@@ -57,6 +96,13 @@ local conf = {
                 ["$"] = noop,
                 ["t"] = noop,
                 ["f"] = noop,
+
+                -- stage path under cursor
+                ["<leader>hs"] = stage_path,
+                -- unstage path under cursor
+                -- TODO: toggle feature, <leader>hr does NOT actually correspond with the funtion
+                --   of the equivalent hunk stage binding, as that binding restores the hunk!
+                ["<leader>hr"] = unstage_path,
             },
             hide_cursor = true,
         })
