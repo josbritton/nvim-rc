@@ -377,11 +377,26 @@ return {
                         check = {
                             command = "clippy", -- Important
                         },
+                        lens = {
+                            references = {
+                                adt = {
+                                    enable = true,
+                                },
+                                enumVariant = {
+                                    enable = true,
+                                },
+                                method = {
+                                    enable = true,
+                                },
+                                trait = {
+                                    enable = true,
+                                },
+                            },
+                        },
                         inlayHints = {
-                            -- maxLength = 25,
-                            -- bindingModeHints = {
-                            --     enable = true,
-                            -- },
+                            bindingModeHints = {
+                                enable = true,
+                            },
                             closureCaptureHints = {
                                 enable = true,
                             },
@@ -391,73 +406,87 @@ return {
                             discriminantHints = {
                                 enable = true,
                             },
-                            -- expressionAdjustmentHints = {
-                            --     enable = true,
-                            --     -- hideOutsideUnsafe = false,
-                            --     -- mode = "prefix",
-                            -- },
-                            -- genericParameterHints = {
-                            --     lifetime = {
-                            --         enable = true,
-                            --     },
-                            --     type = {
-                            --         enable = true,
-                            --     },
-                            -- },
-                            -- implicitDrops = {
-                            --     enable = true,
-                            -- },
-                            -- implicitSizedBoundHints = {
-                            --     enable = true,
-                            -- },
-                            -- lifetimeElisionHints = {
-                            --     enable = true,
-                            --     useParameterNames = true,
-                            -- },
-                            -- rangeExclusiveHints = {
-                            --     enable = true,
-                            -- },
-                            -- reborrowHints = {
-                            --     enable = true,
-                            -- },
-                            -- typeHints = {
-                            --     hideClosureInitialization = true,
-                            --     hideClosureParameter = true,
-                            --     hideNamedConstructor = true,
-                            -- },
+                            expressionAdjustmentHints = {
+                                enable = true,
+                            },
+                            genericParameterHints = {
+                                lifetime = {
+                                    enable = true,
+                                },
+                                type = {
+                                    enable = true,
+                                },
+                            },
+                            implicitDrops = {
+                                enable = true,
+                            },
+                            implicitSizedBoundHints = {
+                                enable = true,
+                            },
+                            lifetimeElisionHints = {
+                                enable = true,
+                                useParameterNames = true,
+                            },
+                            rangeExclusiveHints = {
+                                enable = true,
+                            },
+                            reborrowHints = {
+                                enable = true,
+                            },
+                        },
+                        hover = {
+                            memoryLayout = {
+                                niches = true,
+                                offset = "hexadecimal",
+                                size = "both",
+                            },
+                            show = {
+                                traitAssocItems = 5,
+                                fields = 5,
+                                enumVariants = 5,
+                            },
                         },
                         imports = {
                             granularity = {
-                                group = "module", -- def: "crate"
+                                group = "module",
                                 enforce = true,
                             },
-                            prefix = "self", -- def: "plain"
+                            prefix = "self",
                             preferNoStd = true,
-                            -- prefixExternPrelude = true,
                         },
                         completion = {
-                            -- limit = 10,
-                            -- fullFunctionSignatures = {
-                            --     enable = true, -- def: false
-                            -- },
+                            fullFunctionSignatures = {
+                                enable = true,
+                            },
                             -- show private items and fields even if they aren't visible
                             privateEditable = {
                                 enable = true,
                             },
-                            -- -- expensive?
-                            -- termSearch = {
-                            --     enable = true,
-                            --     fuel = 1000, -- fuel in "units of work"
-                            -- },
+                            termSearch = {
+                                enable = true,
+                                fuel = 1000, -- units of work
+                            },
                         },
                         diagnostics = {
                             styleLints = {
                                 enable = true,
                             },
-                            -- experimental = {
-                            --     enable = true,
-                            -- },
+                            warningsAsHint = {
+                                "clippy::must_use_candidate",
+                                "clippy::arithmetic_side_effects",
+                                "clippy::cast_precision_loss",
+                                "clippy::as_conversions",
+                            },
                         },
+                        cargo = {
+                            -- pass `--all-features` to cargo commands
+                            features = "all",
+                            targetDir = true,
+                        },
+                        -- cachePriming = {
+                        --     enable = true,
+                        --     numThreads = 32 / 4,
+                        -- },
                     },
                 },
             },
