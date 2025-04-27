@@ -2,7 +2,34 @@ return {
     "lewis6991/gitsigns.nvim",
     event = { "BufReadPost", "BufNewFile" },
     config = function()
+        local api = vim.api
         local gitsigns = require("gitsigns")
+        local status = require("gitsigns.status")
+
+        local redrawstatus = vim.schedule_wrap(function()
+            vim.api.nvim__redraw({ statusline = true })
+        end)
+
+        -- override status update calls to redraw the statusline directly
+        local gs_update = status.update
+        ---@diagnostic disable-next-line: duplicate-set-field
+        status.update = function(self, bufnr, status)
+            if not api.nvim_buf_is_loaded(bufnr) then
+                return
+            end
+            gs_update(self, bufnr, status)
+            redrawstatus()
+        end
+
+        local gs_clear = status.clear
+        ---@diagnostic disable-next-line: duplicate-set-field
+        status.clear = function(self, bufnr)
+            if not api.nvim_buf_is_loaded(bufnr) then
+                return
+            end
+            gs_clear(self, bufnr)
+            redrawstatus()
+        end
 
         local function on_attach(bufnr)
             ---@param mode string|string[]

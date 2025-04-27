@@ -298,6 +298,10 @@ function M.bufname()
     return full_path
 end
 
+M.redraw = vim.schedule_wrap(function()
+    vim.api.nvim__redraw({ statusline = true })
+end)
+
 --- @param x string
 --- @return string
 local function pad(x)
@@ -407,32 +411,20 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 
 hldefs()
 
----@type function
-local redrawstatus = vim.schedule_wrap(function()
-    vim.api.nvim__redraw({ statusline = true })
-end)
+-- override diagnostic update calls to redraw the statusline directly
+local d_reset = vim.diagnostic.reset
+---@diagnostic disable-next-line: duplicate-set-field
+vim.diagnostic.reset = function(self, ns, bufnr)
+    d_reset(self, ns, bufnr)
+    Statusline.redraw()
+end
 
--- delay creating frequently updating autocmds until first file read
-vim.api.nvim_create_autocmd({
-    "BufNewFile",
-    "BufReadPost",
-    "FilterReadPost",
-    "FileReadPost",
-}, {
-    group = group,
-    once = true,
-    callback = function()
-        vim.api.nvim_create_autocmd("User", {
-            pattern = "GitSignsUpdate",
-            group = group,
-            callback = redrawstatus,
-        })
-        vim.api.nvim_create_autocmd("DiagnosticChanged", {
-            group = group,
-            callback = redrawstatus,
-        })
-    end,
-})
+local d_set = vim.diagnostic.set
+---@diagnostic disable-next-line: duplicate-set-field
+vim.diagnostic.set = function(self, ns, bufnr, diagnostics, opts)
+    d_set(self, ns, bufnr, diagnostics, opts)
+    Statusline.redraw()
+end
 
 _G.statusline = M
 
