@@ -7,6 +7,7 @@ return {
             -- scope highlighting from treesitter
             scope = {
                 highlight = { "LineNrAbove" },
+                priority = 145, -- should be less than diagnostics
             },
         })
     end,
