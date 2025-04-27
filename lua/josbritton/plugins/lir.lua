@@ -35,7 +35,6 @@ local conf = {
                 ["R"] = actions.rename,
                 ["Y"] = actions.yank_path,
                 ["D"] = actions.delete,
-                ["."] = actions.toggle_show_hidden,
             },
             hide_cursor = true,
         })
