@@ -33,6 +33,8 @@ return {
             )
         end
 
+        local util = require("lspconfig.util")
+
         ---@type integer
         local id = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true })
         vim.api.nvim_create_autocmd("LspAttach", {
@@ -151,7 +153,10 @@ return {
                 -- organize Go imports before write
                 if client.name == "gopls" then
                     lsp_format = function(opts)
-                        local params = vim.lsp.util.make_range_params()
+                        local enc =
+                            vim.lsp.get_clients({ bufnr = ev.buf })[1].offset_encoding
+                        local params = vim.lsp.util.make_range_params(nil, enc)
+                        ---@diagnostic disable-next-line: inject-field
                         params.context = { only = { "source.organizeImports" } }
 
                         local timeout_ms = 1000
@@ -282,6 +287,7 @@ return {
             end,
         })
 
+        -- get supported LSP client capabilities that are implemented by Neovim
         local capabilities = vim.lsp.protocol.make_client_capabilities()
         capabilities = vim.tbl_deep_extend(
             "force",
@@ -289,6 +295,7 @@ return {
             require("blink-cmp").get_lsp_capabilities()
         )
 
+        ---@type table<string, vim.lsp.Config>
         local system_servers = {
             clangd = {
                 cmd = {
@@ -301,7 +308,7 @@ return {
                     "--fallback-style=llvm",
                 },
                 root_dir = function(fname)
-                    return require("lspconfig.util").root_pattern(
+                    return util.root_pattern(
                         "Makefile",
                         ".clangd",
                         ".clang-tidy",
@@ -312,7 +319,7 @@ return {
                         "meson.build",
                         "meson_options.txt",
                         "build.ninja"
-                    )(fname) or require("lspconfig.util").root_pattern(
+                    )(fname) or util.root_pattern(
                         "compile_commands.json",
                         "compile_flags.txt"
                     )(fname) or vim.fs.dirname(
@@ -419,8 +426,8 @@ return {
             },
         }
 
+        ---@type table<string, vim.lsp.Config>
         local mason_servers = {
-            -- keys are lspconfig server names
             lua_ls = {
                 settings = {
                     Lua = {
