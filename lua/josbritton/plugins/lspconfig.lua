@@ -361,6 +361,12 @@ return {
                 },
             },
             rust_analyzer = {
+                -- TODO: write a handler for these colored rust_analyzer diagnostics
+                -- capabilities = {
+                --     experimental = {
+                --         colorDiagnosticOutput = true,
+                --     },
+                -- },
                 capabilities = {
                     experimental = {
                         serverStatusNotification = true,
