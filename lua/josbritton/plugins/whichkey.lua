@@ -2,6 +2,7 @@ return {
     "folke/which-key.nvim",
     event = "VimEnter",
     ---@type wk.Opts
+    ---@diagnostic disable-next-line: missing-fields
     opts = {
         delay = 0, -- also see vim.opt.timeoutlen
         disable = {
