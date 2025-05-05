@@ -42,52 +42,52 @@ return {
                 vim.keymap.set(mode, l, r, opts)
             end
 
-            map("n", "<leader>hs", gitsigns.stage_hunk, { desc = "Stage git hunk" })
+            map("n", "<leader>hs", gitsigns.stage_hunk, { desc = "Git: [h]unk [s]tage" })
 
             map("v", "<leader>hs", function()
                 -- partial-hunk selections only support line-by-line ranges
                 gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-            end, { desc = "Stage git hunk" })
+            end, { desc = "Git: [h]unk [s]tage" })
 
-            map("n", "<leader>hr", gitsigns.reset_hunk, { desc = "Reset git hunk" })
+            map("n", "<leader>hr", gitsigns.reset_hunk, { desc = "Git: [h]unk [r]eset" })
             map("v", "<leader>hr", function()
                 -- partial-hunk selections only support line-by-line ranges
                 gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-            end, { desc = "Reset git hunk" })
+            end, { desc = "Git: [h]unk [r]eset" })
 
             map(
                 { "n", "v" },
                 "<leader>hS",
                 gitsigns.stage_buffer,
-                { desc = "Stage git buffer" }
+                { desc = "Git: [h]unk [S]tage BUFFER" }
             )
 
             map(
                 { "n", "v" },
                 "<leader>hR",
                 gitsigns.reset_buffer,
-                { desc = "Reset git buffer" }
+                { desc = "Git: [h]unk [R]eset BUFFER" }
             )
 
             map(
                 { "n", "v" },
                 "<leader>hp",
                 gitsigns.preview_hunk,
-                { desc = "Preview git hunk" }
+                { desc = "Git: [h]unk [p]review" }
             )
 
             map(
                 { "n", "v" },
                 "<leader>tb",
                 gitsigns.toggle_current_line_blame,
-                { desc = "Toggle current git blame line" }
+                { desc = "Git: [T]oggle [b]lame line" }
             )
 
             map(
                 { "n", "v" },
                 "<leader>td",
                 gitsigns.preview_hunk_inline,
-                { desc = "Preview git hunk inline" }
+                { desc = "Git: [T]oggle [d]eleted hunk" }
             )
 
             map(
