@@ -462,10 +462,6 @@ return {
                             privateEditable = {
                                 enable = true,
                             },
-                            termSearch = {
-                                enable = true,
-                                fuel = 1000, -- units of work
-                            },
                         },
                         diagnostics = {
                             styleLints = {
