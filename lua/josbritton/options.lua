@@ -151,11 +151,23 @@ vim.filetype.add({
     },
 })
 
-vim.diagnostic.config({
+---@type vim.diagnostic.Opts
+local diag = {
     virtual_text = nil,
     severity_sort = true, -- why is this not set by default?
     update_in_insert = false,
-})
+    underline = {
+        severity = 4,
+    },
+}
+vim.diagnostic.config(diag)
+
+vim.keymap.set("n", "<leader>td", function()
+    local opts = vim.diagnostic.config() or diag
+    -- toggle severity filter to/from ERROR, HINT (all)
+    opts.underline.severity = opts.underline.severity < 4 and 4 or 1
+    vim.diagnostic.config(opts)
+end, { desc = "[T]oggle [D]iagnostics" })
 
 -- remove builtin
 vim.g.loaded_gzip = 1
