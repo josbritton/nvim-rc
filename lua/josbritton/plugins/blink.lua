@@ -3,6 +3,18 @@ return {
         "saghen/blink.pairs",
         event = "InsertEnter",
         version = false, -- use latest commit
+        init = function()
+            vim.api.nvim_create_user_command(
+                "BlinkPairsDisable",
+                require("blink.pairs.mappings").disable,
+                { desc = "Disable blink.pairs mappings" }
+            )
+            vim.api.nvim_create_user_command(
+                "BlinkPairsEnable",
+                require("blink.pairs.mappings").enable,
+                { desc = "Enable blink.pairs mappings" }
+            )
+        end,
         build = (function()
             -- rustup is makes building from nightly much easier, use if possible
             if vim.fn.executable("rustup") ~= 1 then
