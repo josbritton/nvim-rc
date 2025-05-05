@@ -72,7 +72,7 @@ return {
             map(
                 { "n", "v" },
                 "<leader>hp",
-                gitsigns.preview_hunk,
+                gitsigns.preview_hunk_inline,
                 { desc = "Git: [h]unk [p]review" }
             )
 
@@ -81,13 +81,6 @@ return {
                 "<leader>tb",
                 gitsigns.toggle_current_line_blame,
                 { desc = "Git: [T]oggle [b]lame line" }
-            )
-
-            map(
-                { "n", "v" },
-                "<leader>td",
-                gitsigns.preview_hunk_inline,
-                { desc = "Git: [T]oggle [d]eleted hunk" }
             )
 
             map(
