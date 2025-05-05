@@ -77,13 +77,6 @@ return {
             )
 
             map(
-                { "n", "v" },
-                "<leader>tb",
-                gitsigns.toggle_current_line_blame,
-                { desc = "Git: [T]oggle [b]lame line" }
-            )
-
-            map(
                 { "o", "x", "v" },
                 "ih",
                 gitsigns.select_hunk,
@@ -129,9 +122,9 @@ return {
                 { desc = "Jump to previous hunk", noremap = true }
             )
 
-            map("n", "<leader>hb", function()
+            map("n", "<leader>tb", function()
                 gitsigns.blame_line({ full = true })
-            end)
+            end, { desc = "Git: [T]oggle [B]lame line" })
         end
 
         gitsigns.setup({
