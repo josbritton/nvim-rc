@@ -4,7 +4,8 @@
     "version": "LuaJIT"
   },
   "completion": {
-    "callSnippet": "Replace"
+    "callSnippet": "Replace",
+    "displayContext": 6
   },
   "diagnostics": {
     "disable": [
