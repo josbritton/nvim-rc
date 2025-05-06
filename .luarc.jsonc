@@ -11,6 +11,11 @@
       "redefined-local",
       "missing-fields"
     ],
+    "severity": {
+      "undefined-global": "Error",
+      "missing-parameter": "Error",
+      "no-unknown": "Warning"
+    },
     "groupFileStatus": {
       "strict": "Opened",
       "strong": "Opened",
@@ -24,7 +29,6 @@
       "unused": "Opened"
     },
     "groupSeverity": {
-      "strong": "Warning",
       "strict": "Warning"
     },
     "unusedLocalExclude": [
