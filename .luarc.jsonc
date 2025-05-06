@@ -3,9 +3,13 @@
   "runtime": {
     "version": "LuaJIT"
   },
+  "completion": {
+    "callSnippet": "Replace"
+  },
   "diagnostics": {
     "disable": [
-      "redefined-local"
+      "redefined-local",
+      "missing-fields"
     ],
     "groupFileStatus": {
       "strict": "Opened",

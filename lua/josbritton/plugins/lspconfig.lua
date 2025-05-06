@@ -448,16 +448,7 @@ return {
 
         ---@type table<string, vim.lsp.Config>
         local mason_servers = {
-            lua_ls = {
-                settings = {
-                    Lua = {
-                        completion = {
-                            callSnippet = "Replace",
-                        },
-                        diagnostics = { disable = { "missing-fields" } },
-                    },
-                },
-            },
+            lua_ls = {}, -- see: `.luarc.jsonc`
             jsonls = {
                 settings = {
                     json = {
