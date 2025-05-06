@@ -185,7 +185,7 @@ return {
 
             snippets = { preset = "luasnip" },
 
-            -- can extend without redefining it, using `opts_extend`
+            -- is extended with default providers using `opts_extend`
             sources = {
                 default = { "lazydev", "lsp", "path", "snippets" },
                 providers = {
@@ -251,6 +251,7 @@ return {
                 },
             },
         },
+        -- extends this table with the default providers
         opts_extend = { "sources.default" },
     },
 }
