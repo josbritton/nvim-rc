@@ -218,6 +218,74 @@ local function setup_inlay_hints(_client, ev)
     end, "[T]oggle Inlay [H]ints", ev.buf)
 end
 
+---@param ev vim.api.keyset.create_autocmd.callback_args
+---@return nil
+local function setup_default_keymaps(ev)
+    -- jump to the definition of the word under your cursor.
+    --  This is where a variable was first declared, or where a function is defined, etc.
+    --  To jump back, press <C-t>.
+    nmap(
+        "gd",
+        require("telescope.builtin").lsp_definitions,
+        "[G]oto [D]efinition",
+        ev.buf
+    )
+
+    -- find references for the word under your cursor.
+    nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences", ev.buf)
+
+    -- jump to the implementation of the word under your cursor.
+    --  Useful when your language has ways of declaring types without an actual implementation.
+    nmap(
+        "gI",
+        require("telescope.builtin").lsp_implementations,
+        "[G]oto [I]mplementation",
+        ev.buf
+    )
+
+    -- jump to the type of the word under your cursor.
+    --  useful when you're not sure what type a variable is and you want to see
+    --  the definition of its *type*, not where it was *defined*.
+    nmap(
+        "<leader>D",
+        require("telescope.builtin").lsp_type_definitions,
+        "Type [D]efinition",
+        ev.buf
+    )
+
+    -- fuzzy find all the symbols in your current document.
+    --  symbols are things like variables, functions, types, etc.
+    nmap(
+        "<leader>ds",
+        require("telescope.builtin").lsp_document_symbols,
+        "[D]ocument [S]ymbols",
+        ev.buf
+    )
+
+    -- fuzzy find all the symbols in your current workspace.
+    --  similar to document symbols, except searches over your entire project.
+    nmap(
+        "<leader>ws",
+        require("telescope.builtin").lsp_dynamic_workspace_symbols,
+        "[W]orkspace [S]ymbols",
+        ev.buf
+    )
+
+    -- rename the variable under your cursor.
+    --  most Language Servers support renaming across files, etc.
+    nmap("<leader>rn", vim.lsp.buf.rename, "LSP: [R]e[n]ame Item", ev.buf)
+
+    -- execute a code action, usually your cursor needs to be on top of an error
+    -- or a suggestion from your LSP for this to activate.
+    nmap("<leader>ca", vim.lsp.buf.code_action, "LSP: [C]ode [A]ction", ev.buf)
+
+    -- opens a popup that displays documentation about the word under your cursor
+    --  see `:help K` for why this keymap.
+    nmap("K", vim.lsp.buf.hover, "Hover Documentation", ev.buf)
+
+    nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration", ev.buf)
+end
+
 return {
     "neovim/nvim-lspconfig",
     dependencies = {
@@ -245,79 +313,7 @@ return {
         vim.api.nvim_create_autocmd("LspAttach", {
             group = attach_gid,
             callback = function(ev)
-                -- jump to the definition of the word under your cursor.
-                --  This is where a variable was first declared, or where a function is defined, etc.
-                --  To jump back, press <C-t>.
-                nmap(
-                    "gd",
-                    require("telescope.builtin").lsp_definitions,
-                    "[G]oto [D]efinition",
-                    ev.buf
-                )
-
-                -- find references for the word under your cursor.
-                nmap(
-                    "gr",
-                    require("telescope.builtin").lsp_references,
-                    "[G]oto [R]eferences",
-                    ev.buf
-                )
-
-                -- jump to the implementation of the word under your cursor.
-                --  Useful when your language has ways of declaring types without an actual implementation.
-                nmap(
-                    "gI",
-                    require("telescope.builtin").lsp_implementations,
-                    "[G]oto [I]mplementation",
-                    ev.buf
-                )
-
-                -- jump to the type of the word under your cursor.
-                --  useful when you're not sure what type a variable is and you want to see
-                --  the definition of its *type*, not where it was *defined*.
-                nmap(
-                    "<leader>D",
-                    require("telescope.builtin").lsp_type_definitions,
-                    "Type [D]efinition",
-                    ev.buf
-                )
-
-                -- fuzzy find all the symbols in your current document.
-                --  symbols are things like variables, functions, types, etc.
-                nmap(
-                    "<leader>ds",
-                    require("telescope.builtin").lsp_document_symbols,
-                    "[D]ocument [S]ymbols",
-                    ev.buf
-                )
-
-                -- fuzzy find all the symbols in your current workspace.
-                --  similar to document symbols, except searches over your entire project.
-                nmap(
-                    "<leader>ws",
-                    require("telescope.builtin").lsp_dynamic_workspace_symbols,
-                    "[W]orkspace [S]ymbols",
-                    ev.buf
-                )
-
-                -- rename the variable under your cursor.
-                --  most Language Servers support renaming across files, etc.
-                nmap("<leader>rn", vim.lsp.buf.rename, "LSP: [R]e[n]ame Item", ev.buf)
-
-                -- execute a code action, usually your cursor needs to be on top of an error
-                -- or a suggestion from your LSP for this to activate.
-                nmap(
-                    "<leader>ca",
-                    vim.lsp.buf.code_action,
-                    "LSP: [C]ode [A]ction",
-                    ev.buf
-                )
-
-                -- opens a popup that displays documentation about the word under your cursor
-                --  see `:help K` for why this keymap.
-                nmap("K", vim.lsp.buf.hover, "Hover Documentation", ev.buf)
-
-                nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration", ev.buf)
+                setup_default_keymaps(ev)
 
                 local client = vim.lsp.get_client_by_id(ev.data.client_id)
                 if client == nil then
