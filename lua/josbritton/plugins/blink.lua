@@ -187,12 +187,17 @@ return {
 
             -- is extended with default providers using `opts_extend`
             sources = {
-                default = { "lazydev", "lsp", "path", "snippets" },
+                default = function()
+                    if vim.bo.filetype == "lua" then
+                        return { "lazydev", "lsp", "path", "snippets" }
+                    end
+
+                    return { "lsp", "path", "snippets" }
+                end,
                 providers = {
                     lazydev = {
                         name = "LazyDev",
                         module = "lazydev.integrations.blink",
-                        -- make lazydev completions top priority (see `:h blink.cmp`)
                         score_offset = 100,
                     },
                 },
