@@ -330,11 +330,6 @@ return {
                 --         colorDiagnosticOutput = true,
                 --     },
                 -- },
-                capabilities = {
-                    experimental = {
-                        serverStatusNotification = true,
-                    },
-                },
                 settings = {
                     ["rust-analyzer"] = {
                         check = {
