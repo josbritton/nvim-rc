@@ -69,6 +69,26 @@ local function setup_lsp_handlers(client)
     -- other handlers
 end
 
+---@param _client vim.lsp.Client
+---@param ev vim.api.keyset.create_autocmd.callback_args
+---@return nil
+local function setup_inlay_hints(_client, ev)
+    local enabled_on_attach = true
+
+    if vim.b[ev.buf].client_blocking_inlay_hints then
+        enabled_on_attach = false
+    end
+
+    vim.lsp.inlay_hint.enable(enabled_on_attach, { bufnr = ev.buf })
+
+    nmap("<leader>th", function()
+        vim.lsp.inlay_hint.enable(
+            not vim.lsp.inlay_hint.is_enabled({ bufnr = ev.buf }),
+            { bufnr = ev.buf }
+        )
+    end, "[T]oggle Inlay [H]ints", ev.buf)
+end
+
 return {
     "neovim/nvim-lspconfig",
     dependencies = {
@@ -93,7 +113,6 @@ return {
             )
         end
 
-        local util = require("lspconfig.util")
         vim.api.nvim_create_autocmd("LspAttach", {
             group = attach_gid,
             callback = function(ev)
@@ -176,45 +195,25 @@ return {
                     return
                 end
 
+                local lsp_inlay_hints_blocklist = {
+                    rust_analyzer = true,
+                }
                 if
                     client.server_capabilities.inlayHintProvider
                     and vim.lsp.inlay_hint
                 then
-                    local settings = {
-                        rust_analyzer = {
-                            enabled = false,
-                        },
-                    }
+                    if lsp_inlay_hints_blocklist[client.name] then
+                        -- if a client attached to the buffer is in the blocklist,
+                        -- disable inlay hints even if another client that loads after
+                        -- DOES want inlaid hints
+                        vim.b[ev.buf].client_blocking_inlay_hints = true
 
-                    vim.schedule(function()
-                        -- consider all clients attached to the buffer, if any do not want inlay
-                        -- hints then do not enable it
-                        local enabled_on_attach = true
-                        for _i, c in
-                            ipairs(
-                                vim.tbl_values(
-                                    util.get_config_by_ft(vim.bo[ev.buf].filetype)
-                                )
-                            )
-                        do
-                            if
-                                (settings[c.name] or {}).enabled ~= nil
-                                and (settings[c.name] or {}).enabled == false
-                            then
-                                enabled_on_attach = false
-                                break
-                            end
+                        if vim.lsp.inlay_hint.is_enabled({ bufnr = ev.buf }) then
+                            vim.lsp.inlay_hint.enable(false, { bufnr = ev.buf })
                         end
+                    end
 
-                        vim.lsp.inlay_hint.enable(enabled_on_attach, { bufnr = ev.buf })
-                    end)
-
-                    nmap("<leader>th", function()
-                        vim.lsp.inlay_hint.enable(
-                            not vim.lsp.inlay_hint.is_enabled({ bufnr = ev.buf }),
-                            { bufnr = ev.buf }
-                        )
-                    end, "[T]oggle Inlay [H]ints", ev.buf)
+                    setup_inlay_hints(client, ev)
                 end
 
                 local lsp_formatting_blocklist = {
