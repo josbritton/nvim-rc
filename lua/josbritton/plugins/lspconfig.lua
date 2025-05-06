@@ -69,6 +69,135 @@ local function setup_lsp_handlers(client)
     -- other handlers
 end
 
+---@param client vim.lsp.Client
+---@param ev vim.api.keyset.create_autocmd.callback_args
+local function setup_formatting(client, ev)
+    ---@param opts vim.lsp.buf.format.Opts
+    local lsp_format = function(opts)
+        vim.lsp.buf.format(opts)
+    end
+
+    -- organize Go imports before write
+    if client.name == "gopls" then
+        lsp_format = function(opts)
+            local enc = vim.lsp.get_clients({ bufnr = ev.buf })[1].offset_encoding
+            local params = vim.lsp.util.make_range_params(nil, enc)
+            ---@diagnostic disable-next-line: inject-field
+            params.context = { only = { "source.organizeImports" } }
+
+            local timeout_ms = 1000
+            local result, _ =
+                vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, timeout_ms)
+            for cid, res in pairs(result or {}) do
+                for _, r in pairs(res.result or {}) do
+                    if r.edit then
+                        local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding
+                            or "utf-16"
+                        vim.lsp.util.apply_workspace_edit(r.edit, enc)
+                    end
+                end
+            end
+            vim.lsp.buf.format(opts)
+        end
+    end
+
+    -- create a command `:Format` local to the LSP buffer
+    vim.api.nvim_buf_create_user_command(ev.buf, "Format", function(_)
+        vim.schedule(function()
+            lsp_format({
+                async = true,
+                filter = function(c)
+                    return c.id == client.id
+                end,
+            })
+        end)
+    end, { desc = "Format current buffer with LSP" })
+
+    -- manual format binding
+    vim.keymap.set("n", "<leader>f", function()
+        vim.schedule(function()
+            lsp_format({
+                async = true,
+                filter = function(c)
+                    return c.id == client.id
+                end,
+            })
+        end)
+    end, {
+        buffer = ev.buf,
+        desc = "Format current buffer with LSP",
+    })
+
+    -- LSP autoformatting *before* saving file
+    --
+    -- if LSP client that is attaching to current buffer is in table `lsp_autoformat_clients`:
+    -- if NOT NIL,
+    --     enable autoformatting, creating the command `:AutoFormatOFF` to temporarily disable it
+    -- if NIL,
+    --     create the command `AutoFormatON` to temporarily enable autoformatting
+
+    local lsp_autoformat_clients = {}
+
+    ---@type function
+    local enable_lsp_autoformatting
+    ---@type function
+    local create_autoformat_off_cmd
+    ---@type function
+    local create_autoformat_on_cmd
+
+    ---@return number # The ID number of the autocommand that was just created
+    enable_lsp_autoformatting = function()
+        return vim.api.nvim_create_autocmd("BufWritePre", {
+            group = attach_gid,
+            buffer = ev.buf,
+            callback = function()
+                lsp_format({
+                    async = false, -- default
+                    filter = function(c)
+                        return c.id == client.id
+                    end,
+                })
+            end,
+        })
+    end
+
+    ---@param cmd number The ID number of the autocommand to be deleted
+    ---@return nil
+    create_autoformat_off_cmd = function(cmd)
+        pcall(vim.api.nvim_buf_del_user_command, ev.buf, "AutoFormatON")
+
+        -- use with `:AutoFormatOFF`, buffer-local & temporary
+        vim.api.nvim_buf_create_user_command(ev.buf, "AutoFormatOFF", function()
+            local ok, _ = pcall(vim.api.nvim_del_autocmd, cmd)
+            if ok then
+                create_autoformat_on_cmd()
+            end
+        end, { desc = "Disable automatic LSP formatting before saving" })
+    end
+
+    ---@return nil
+    create_autoformat_on_cmd = function()
+        pcall(vim.api.nvim_buf_del_user_command, ev.buf, "AutoFormatOFF")
+
+        -- use with `:AutoFormatON`, buffer-local & temporary
+        vim.api.nvim_buf_create_user_command(ev.buf, "AutoFormatON", function()
+            local ok, cmd = pcall(enable_lsp_autoformatting)
+            if ok then
+                create_autoformat_off_cmd(cmd)
+            end
+        end, { desc = "Enable automatic LSP formatting before saving" })
+    end
+
+    if (lsp_autoformat_clients or {})[client.name] ~= nil then
+        local ok, cmd = pcall(enable_lsp_autoformatting)
+        if ok then
+            create_autoformat_off_cmd(cmd)
+        end
+    else
+        create_autoformat_on_cmd()
+    end
+end
+
 ---@param _client vim.lsp.Client
 ---@param ev vim.api.keyset.create_autocmd.callback_args
 ---@return nil
@@ -223,159 +352,18 @@ return {
                 }
 
                 if
+                    client.server_capabilities.documentFormattingProvider
+                    and not lsp_formatting_blocklist[client.name]
+                then
+                    setup_formatting(client, ev)
+                end
+
+                if
                     -- include all handler-related capabilities here
                     client.capabilities.experimental
                     and client.capabilities.experimental["serverStatusNotification"]
                 then
                     setup_lsp_handlers(client)
-                end
-
-                -- continue only if we need LSP formatting
-                if
-                    not (client and client.server_capabilities.documentFormattingProvider)
-                    or lsp_formatting_blocklist[client.name] ~= nil
-                then
-                    return
-                end
-
-                ---@param opts vim.lsp.buf.format.Opts
-                local lsp_format = function(opts)
-                    vim.lsp.buf.format(opts)
-                end
-
-                -- organize Go imports before write
-                if client.name == "gopls" then
-                    lsp_format = function(opts)
-                        local enc =
-                            vim.lsp.get_clients({ bufnr = ev.buf })[1].offset_encoding
-                        local params = vim.lsp.util.make_range_params(nil, enc)
-                        ---@diagnostic disable-next-line: inject-field
-                        params.context = { only = { "source.organizeImports" } }
-
-                        local timeout_ms = 1000
-                        local result, _ = vim.lsp.buf_request_sync(
-                            0,
-                            "textDocument/codeAction",
-                            params,
-                            timeout_ms
-                        )
-                        for cid, res in pairs(result or {}) do
-                            for _, r in pairs(res.result or {}) do
-                                if r.edit then
-                                    local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding
-                                        or "utf-16"
-                                    vim.lsp.util.apply_workspace_edit(r.edit, enc)
-                                end
-                            end
-                        end
-                        vim.lsp.buf.format(opts)
-                    end
-                end
-
-                -- create a command `:Format` local to the LSP buffer
-                vim.api.nvim_buf_create_user_command(ev.buf, "Format", function(_)
-                    vim.schedule(function()
-                        lsp_format({
-                            async = true,
-                            filter = function(c)
-                                return c.id == client.id
-                            end,
-                        })
-                    end)
-                end, { desc = "Format current buffer with LSP" })
-
-                -- manual format binding
-                vim.keymap.set("n", "<leader>f", function()
-                    vim.schedule(function()
-                        lsp_format({
-                            async = true,
-                            filter = function(c)
-                                return c.id == client.id
-                            end,
-                        })
-                    end)
-                end, {
-                    buffer = ev.buf,
-                    desc = "Format current buffer with LSP",
-                })
-
-                -- LSP autoformatting *before* saving file
-                --
-                -- if LSP client that is attaching to current buffer is in table `lsp_autoformat_clients`:
-                -- if NOT NIL,
-                --     enable autoformatting, creating the command `:AutoFormatOFF` to temporarily disable it
-                -- if NIL,
-                --     create the command `AutoFormatON` to temporarily enable autoformatting
-
-                local lsp_autoformat_clients = {}
-
-                ---@type function
-                local enable_lsp_autoformatting
-                ---@type function
-                local create_autoformat_off_cmd
-                ---@type function
-                local create_autoformat_on_cmd
-
-                ---@return number # The ID number of the autocommand that was just created
-                enable_lsp_autoformatting = function()
-                    return vim.api.nvim_create_autocmd("BufWritePre", {
-                        group = id,
-                        buffer = ev.buf,
-                        callback = function()
-                            lsp_format({
-                                async = false, -- default
-                                filter = function(c)
-                                    return c.id == client.id
-                                end,
-                            })
-                        end,
-                    })
-                end
-
-                ---@param cmd number The ID number of the autocommand to be deleted
-                ---@return nil
-                create_autoformat_off_cmd = function(cmd)
-                    pcall(vim.api.nvim_buf_del_user_command, ev.buf, "AutoFormatON")
-
-                    -- use with `:AutoFormatOFF`, buffer-local & temporary
-                    vim.api.nvim_buf_create_user_command(
-                        ev.buf,
-                        "AutoFormatOFF",
-                        function()
-                            local ok, _ = pcall(vim.api.nvim_del_autocmd, cmd)
-                            if ok then
-                                create_autoformat_on_cmd()
-                            end
-                        end,
-                        { desc = "Disable automatic LSP formatting before saving" }
-                    )
-                end
-
-                ---@return nil
-                create_autoformat_on_cmd = function()
-                    pcall(vim.api.nvim_buf_del_user_command, ev.buf, "AutoFormatOFF")
-
-                    -- use with `:AutoFormatON`, buffer-local & temporary
-                    vim.api.nvim_buf_create_user_command(
-                        ev.buf,
-                        "AutoFormatON",
-                        function()
-                            local ok, cmd = pcall(enable_lsp_autoformatting)
-                            if ok then
-                                create_autoformat_off_cmd(cmd)
-                            end
-                        end,
-                        { desc = "Enable automatic LSP formatting before saving" }
-                    )
-                end
-
-                if (lsp_autoformat_clients or {})[client.name] ~= nil then
-                    local ok, cmd = pcall(enable_lsp_autoformatting)
-                    if ok then
-                        create_autoformat_off_cmd(cmd)
-                    end
-                else
-                    create_autoformat_on_cmd()
                 end
             end,
         })
