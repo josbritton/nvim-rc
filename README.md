@@ -31,7 +31,6 @@ Dependencies:
 - shellcheck
 - yarn[^3]
 - rust-analyzer
-- clangd
 - ripgrep/rg[^4]
 - gcc *OR* clang[^1]
 - fd[^5]

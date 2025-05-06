@@ -14,7 +14,6 @@ return {
         { "williamboman/mason.nvim", config = true }, -- NOTE: Must be loaded before dependants
         "williamboman/mason-lspconfig.nvim",
         { "j-hui/fidget.nvim", opts = {} }, -- status UI when loading LSP
-        { "p00f/clangd_extensions.nvim", lazy = true },
     },
     event = { "BufReadPre", "BufNewFile" },
     init = function()
@@ -23,7 +22,6 @@ return {
     config = function()
         ---@type string[]
         local required_bins = {
-            "clangd",
             "rust-analyzer",
         }
         for _i, e in ipairs(required_bins) do
@@ -325,41 +323,6 @@ return {
 
         ---@type table<string, vim.lsp.Config>
         local system_servers = {
-            clangd = {
-                cmd = {
-                    "clangd",
-                    "--background-index",
-                    "--clang-tidy",
-                    "--header-insertion=iwyu",
-                    "--completion-style=detailed",
-                    "--function-arg-placeholders",
-                    "--fallback-style=llvm",
-                },
-                root_dir = function(fname)
-                    return util.root_pattern(
-                        "Makefile",
-                        ".clangd",
-                        ".clang-tidy",
-                        ".clang-format",
-                        "configure.ac",
-                        "configure.in",
-                        "config.h.in",
-                        "meson.build",
-                        "meson_options.txt",
-                        "build.ninja"
-                    )(fname) or util.root_pattern(
-                        "compile_commands.json",
-                        "compile_flags.txt"
-                    )(fname) or vim.fs.dirname(
-                        vim.fs.find(".git", { path = fname, upward = true })[1]
-                    )
-                end,
-                init_options = {
-                    usePlaceholders = true,
-                    completeUnimported = true,
-                    clangdFileStatus = true,
-                },
-            },
             rust_analyzer = {
                 -- TODO: write a handler for these colored rust_analyzer diagnostics
                 -- capabilities = {

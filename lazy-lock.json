@@ -4,7 +4,6 @@
   "ansible-vim": { "branch": "master", "commit": "3329367d2e5f90d203c8d340c53fa83c60a1ad41" },
   "blink.cmp": { "branch": "main", "commit": "7856f05dd48ea7f2c68ad3cba40202f8a9369b9e" },
   "blink.pairs": { "branch": "main", "commit": "fc905a47a4b44b072c7f73c5a63ffb5574f671c5" },
-  "clangd_extensions.nvim": { "branch": "main", "commit": "db28f29be928d18cbfb86fbfb9f83f584f658feb" },
   "cloak.nvim": { "branch": "main", "commit": "648aca6d33ec011dc3166e7af3b38820d01a71e4" },
   "conform.nvim": { "branch": "master", "commit": "372fc521f8421b7830ea6db4d6ea3bae1c77548c" },
   "fidget.nvim": { "branch": "main", "commit": "d9ba6b7bfe29b3119a610892af67602641da778e" },
