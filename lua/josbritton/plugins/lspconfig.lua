@@ -1,11 +1,61 @@
----@class (exact) EventArgs
----@field id number
----@field event string
----@field group number|nil
----@field match string
----@field buf number
----@field file string
----@field data any
+-- Setup LSP handlers for server responses
+---@param client vim.lsp.Client
+---@return nil
+local function setup_lsp_handlers(client)
+    if
+        client.name == "rust_analyzer"
+        and not vim.lsp.handlers["experimental/serverStatus"]
+    then
+        -- Persistent server status notification for Rust Analyzer
+        -- docs: https://rust-analyzer.github.io/book/contributing/lsp-extensions.html#server-status
+        ---@class (exact) RAServerStatusParams
+        --- `ok` means that the server is completely functional.
+        ---
+        --- `warning` means that the server is partially functional.
+        --- It can answer correctly to most requests, but some results
+        --- might be wrong due to, for example, some missing dependencies.
+        ---
+        --- `error` means that the server is not functional. For example,
+        --- there's a fatal build configuration problem. The server might
+        --- still give correct answers to simple requests, but most results
+        --- will be incomplete or wrong.
+        ---@field health "ok"|"warning"|"error"
+        --- Is there any pending background work which might change the status?
+        --- For example, are dependencies being downloaded?
+        ---@field quiescent boolean
+        --- Explanatory message to show on hover.
+        ---@field message? string
+
+        -- local gid =
+        --     vim.api.nvim_create_augroup("RustAnalyzer", { clear = true })
+
+        ---@class (exact) RAServerStatusHandler
+        ---@param err lsp.ResponseError
+        ---@param res RAServerStatusParams
+        ---@param _ctx lsp.HandlerContext
+        vim.lsp.handlers["experimental/serverStatus"] = function(err, res, _ctx)
+            if err then
+                Notify.error(
+                    "LSP handler error: " .. err.message,
+                    { title = "rust_analyzer: serverStatus handler" }
+                )
+                -- todo: try and handle this?
+                return
+            end
+
+            vim.g.rust_analyzer_server_status = res.quiescent and res.health or "working"
+
+            -- todo: send data?
+            -- vim.api.nvim_exec_autocmds("User", {
+            --     pattern = "RustAnalyzerStatusUpdate",
+            --     group = gid,
+            -- })
+            vim.api.nvim__redraw({ statusline = true })
+        end
+    end
+
+    -- other handlers
+end
 
 return {
     "neovim/nvim-lspconfig",
@@ -116,9 +166,12 @@ return {
                 nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
                 local client = vim.lsp.get_client_by_id(ev.data.client_id)
+                if client == nil then
+                    return
+                end
+
                 if
-                    client
-                    and client.server_capabilities.inlayHintProvider
+                    client.server_capabilities.inlayHintProvider
                     and vim.lsp.inlay_hint
                 then
                     local settings = {
@@ -163,6 +216,15 @@ return {
                     lua_ls = true,
                     rust_analyzer = true,
                 }
+
+                if
+                    -- include all handler-related capabilities here
+                    client.capabilities.experimental
+                    and client.capabilities.experimental["serverStatusNotification"]
+                then
+                    setup_lsp_handlers(client)
+                end
+
                 -- continue only if we need LSP formatting
                 if
                     not (client and client.server_capabilities.documentFormattingProvider)
@@ -528,50 +590,6 @@ return {
         })
         for k, _v in pairs(system_servers or {}) do
             setup_lsp_server(k, system_servers or {})
-        end
-
-        --- docs: https://rust-analyzer.github.io/book/contributing/lsp-extensions.html#server-status
-        ---@class (exact) ServerStatusParams
-        --- `ok` means that the server is completely functional.
-        ---
-        --- `warning` means that the server is partially functional.
-        --- It can answer correctly to most requests, but some results
-        --- might be wrong due to, for example, some missing dependencies.
-        ---
-        --- `error` means that the server is not functional. For example,
-        --- there's a fatal build configuration problem. The server might
-        --- still give correct answers to simple requests, but most results
-        --- will be incomplete or wrong.
-        ---@field health "ok"|"warning"|"error"
-        --- Is there any pending background work which might change the status?
-        --- For example, are dependencies being downloaded?
-        ---@field quiescent boolean
-        --- Explanatory message to show on hover.
-        ---@field message? string
-
-        -- local gid =
-        --     vim.api.nvim_create_augroup("RustAnalyzer", { clear = true })
-
-        ---@param err lsp.ResponseError
-        ---@param res ServerStatusParams
-        vim.lsp.handlers["experimental/serverStatus"] = function(err, res)
-            if err then
-                Notify.error(
-                    "LSP handler error: " .. err.message,
-                    { title = "rust_analyzer: serverStatus handler" }
-                )
-                -- todo: try and handle this?
-                return
-            end
-
-            vim.g.rust_analyzer_server_status = res.quiescent and res.health or "working"
-
-            -- todo: send data?
-            -- vim.api.nvim_exec_autocmds("User", {
-            --     pattern = "RustAnalyzerStatusUpdate",
-            --     group = gid,
-            -- })
-            vim.api.nvim__redraw({ statusline = true })
         end
     end,
 }
