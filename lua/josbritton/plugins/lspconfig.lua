@@ -286,6 +286,27 @@ local function setup_default_keymaps(ev)
     nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration", ev.buf)
 end
 
+---@param client vim.lsp.Client
+---@param ev vim.api.keyset.create_autocmd.callback_args
+---@return nil
+local function setup_keymaps(ev, client)
+    if client.name == "rust_analyzer" then
+        nmap(
+            "s", -- `s` in normal-mode is simply a synonym for `cl`.
+            require("telescope.builtin").lsp_document_symbols,
+            "Document [S]ymbols",
+            ev.buf
+        )
+
+        nmap(
+            "S", -- `S` in normal-mode is simply a synonym for `cc`.
+            require("telescope.builtin").lsp_dynamic_workspace_symbols,
+            "Workspace [S]ymbols",
+            ev.buf
+        )
+    end
+end
+
 return {
     "neovim/nvim-lspconfig",
     dependencies = {
@@ -361,6 +382,8 @@ return {
                 then
                     setup_lsp_handlers(client)
                 end
+
+                setup_keymaps(ev, client)
             end,
         })
 
