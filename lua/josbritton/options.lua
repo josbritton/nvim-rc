@@ -155,7 +155,7 @@ vim.filetype.add({
 local diag = {
     virtual_text = nil,
     severity_sort = true, -- why is this not set by default?
-    update_in_insert = false,
+    update_in_insert = true,
     underline = {
         severity = 4,
     },
