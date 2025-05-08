@@ -136,7 +136,10 @@ local function setup_formatting(client, ev)
     -- if NIL,
     --     create the command `AutoFormatON` to temporarily enable autoformatting
 
-    local lsp_autoformat_clients = {}
+    -- troubleshooting: remember to update `lsp_formatting_blocklist`
+    local lsp_autoformat_clients = {
+        rust_analyzer = true,
+    }
 
     ---@type function
     local enable_lsp_autoformatting
@@ -365,7 +368,6 @@ return {
                 local lsp_formatting_blocklist = {
                     ts_ls = true,
                     lua_ls = true,
-                    rust_analyzer = true,
                 }
 
                 if
