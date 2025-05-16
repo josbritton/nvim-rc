@@ -198,6 +198,12 @@ return {
             require("telescope").load_extension("fzf")
         end,
     },
-    { "nvim-lua/plenary.nvim" },
-    { "nvim-tree/nvim-web-devicons" },
+    ---@type LazyPluginSpec
+    {
+        "nvim-lua/plenary.nvim",
+    },
+    ---@type LazyPluginSpec
+    {
+        "nvim-tree/nvim-web-devicons",
+    },
 }
