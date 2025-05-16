@@ -22,7 +22,12 @@ return {
         vim.api.nvim_create_autocmd({ "FileType", "BufWritePost", "CursorHold" }, {
             group = gid,
             callback = function(args)
-                if vim.bo[args.buf].buftype ~= "nofile" then
+                if
+                    vim.api.nvim_get_option_value(
+                        "buftype",
+                        { scope = "local", buf = args.buf }
+                    ) ~= "nofile"
+                then
                     lint.try_lint()
                 end
             end,
