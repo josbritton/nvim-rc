@@ -1,3 +1,4 @@
+---@type LazyPluginSpec
 local conf = {
     "tamago324/lir-git-status.nvim",
     dependencies = {

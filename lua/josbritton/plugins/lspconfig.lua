@@ -310,6 +310,7 @@ local function setup_keymaps(ev, client)
     end
 end
 
+---@type LazyPluginSpec
 return {
     "neovim/nvim-lspconfig",
     dependencies = {

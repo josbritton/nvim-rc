@@ -7,6 +7,7 @@ local opts = {
     },
 }
 
+---@type LazyPluginSpec
 return {
     "stevearc/conform.nvim",
     event = { "BufReadPre", "BufNewFile" },

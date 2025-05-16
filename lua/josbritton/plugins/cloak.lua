@@ -1,3 +1,4 @@
+---@type LazyPluginSpec
 return {
     "laytan/cloak.nvim",
     event = { "BufReadPre", "BufNewFile" },

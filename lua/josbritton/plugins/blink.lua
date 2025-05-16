@@ -1,4 +1,5 @@
 return {
+    ---@type LazyPluginSpec
     {
         "saghen/blink.pairs",
         event = "InsertEnter",
@@ -45,6 +46,7 @@ return {
             debug = false,
         },
     },
+    ---@type LazyPluginSpec
     {
         "saghen/blink.cmp",
         dependencies = {

@@ -1,4 +1,5 @@
 return {
+    ---@type LazyPluginSpec
     {
         "nvim-telescope/telescope.nvim",
         branch = "master",

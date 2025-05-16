@@ -1,4 +1,5 @@
 return {
+    ---@type LazyPluginSpec
     {
         "nvim-treesitter/nvim-treesitter-context",
         event = { "BufReadPost", "BufNewFile", "FileReadPost" },
@@ -7,6 +8,7 @@ return {
             max_lines = 1,
         },
     },
+    ---@type LazyPluginSpec
     {
         "nvim-treesitter/nvim-treesitter",
         dependencies = {
