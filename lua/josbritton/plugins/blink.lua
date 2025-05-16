@@ -17,12 +17,11 @@ return {
             )
         end,
         build = (function()
-            -- rustup is makes building from nightly much easier, use if possible
             if vim.fn.executable("rustup") ~= 1 then
                 if vim.fn.executable("cargo") ~= 1 then
                     return -- no build will occur, and may fallback to lua if unbuilt!
                 end
-                return "cargo build --release" -- requires nightly!
+                return "cargo +nightly build --release"
             end
             return "rustup run nightly cargo build --release"
         end)(),
@@ -64,12 +63,11 @@ return {
         event = "InsertEnter",
         -- version = "*", -- latest stable release
         build = (function()
-            -- rustup is makes building from nightly much easier, use if possible
             if vim.fn.executable("rustup") ~= 1 then
                 if vim.fn.executable("cargo") ~= 1 then
                     return -- no build will occur, and may fallback to lua if unbuilt!
                 end
-                return "cargo build --release" -- requires nightly!
+                return "cargo +nightly build --release"
             end
             return "rustup run nightly cargo build --release"
         end)(),
