@@ -515,10 +515,6 @@ return {
                             features = "all",
                             targetDir = true,
                         },
-                        -- cachePriming = {
-                        --     enable = true,
-                        --     numThreads = 32 / 4,
-                        -- },
                     },
                 },
             },
@@ -556,8 +552,6 @@ return {
                         unusedvariable = true,
                         useany = true,
                     },
-                    -- gofumpt = true,
-                    -- staticcheck = true
                 },
             },
             pyright = {},

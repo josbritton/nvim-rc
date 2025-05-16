@@ -150,16 +150,11 @@ return {
                             { "label" },
                             { "kind" },
                             { "label_description" },
-                            -- { "label", "label_description", gap = 1 },
-                            -- { "kind_icon", "kind" },
                         },
                     },
                 },
                 accept = {
                     create_undo_point = true,
-                    -- some LSPs may add auto brackets themselves. You may be able to configure this
-                    -- behavior in your LSP client configuration
-                    -- auto_brackets = true,
                 },
                 documentation = {
                     auto_show = true,
@@ -173,9 +168,6 @@ return {
                             -- allow extending popup window only, do not surround line with popup
                             menu_north = { "e", "w", "n" },
                             menu_south = { "e", "w", "s" },
-                            -- -- force horizontal windowing only
-                            -- menu_north = { "e", "w" },
-                            -- menu_south = { "e", "w" },
                         },
                         max_height = 20,
                     },

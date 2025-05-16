@@ -88,15 +88,9 @@ return {
                     command = "rust-gdb",
                     args = { "-q", "--interpreter=dap" },
                 }
-                dap.adapters.cppdbg = {
-                    id = "cppdbg",
-                    type = "executable",
-                    command = "cppdbg",
-                }
                 dap.configurations.rust = {
                     {
                         name = "Launch",
-                        -- type = "cppdbg",
                         type = "rust_gdb",
                         request = "launch",
                         program = function()
@@ -107,8 +101,6 @@ return {
                                 end
                         end,
                         cwd = "${workspaceFolder}",
-                        -- MIMode = "gdb",
-                        -- miDebuggerPath = "/usr/bin/rust-gdb",
                         stopAtEntry = true,
                         stopAtBeginningOfMainSubprogram = false,
                         showDisassembly = "never",
@@ -122,12 +114,6 @@ return {
                 dap.toggle_breakpoint,
                 { desc = "DAP: Toggle breakpoint" }
             )
-            -- vim.keymap.set(
-            --     "n",
-            --     "<leader>b",
-            --     dap.run_to_cursor,
-            --     { desc = "DAP: Run to cursor" }
-            -- )
 
             vim.keymap.set("n", "<leader>?", function()
                 require("dapui").eval(nil, { enter = true })
@@ -138,7 +124,6 @@ return {
             vim.keymap.set("n", "<F3>", dap.step_over, { desc = "DAP: Step-over" })
             vim.keymap.set("n", "<F4>", dap.step_out, { desc = "DAP: Step-out" })
             vim.keymap.set("n", "<F5>", dap.step_back, { desc = "DAP: Step-back" })
-            -- vim.keymap.set("n", "<F13>", dap.restart, { desc = "DAP: Restart" })
 
             dap.listeners.before.attach.dapui_config = function()
                 ui.open()

@@ -20,11 +20,6 @@ return {
             -- note: will use LSP and treesitter features
         },
         keys = {
-            -- {
-            --     "<leader>?",
-            --     "<cmd>Telescope oldfiles<CR>",
-            --     desc = "[?] Find recently opened files",
-            -- },
             {
                 "<C-k>",
                 nil,
