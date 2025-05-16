@@ -106,6 +106,28 @@ vim.api.nvim_create_autocmd({ "BufReadPost" }, {
     end,
 })
 
+vim.api.nvim_create_autocmd("FileChangedShellPost", {
+    callback = function()
+        Notify.warn(
+            "File changed on disk. Buffer reloaded.",
+            { title = "Buffer Reloaded" }
+        )
+    end,
+})
+
+-- highlight on yank
+vim.api.nvim_create_autocmd("TextYankPost", {
+    callback = function()
+        vim.hl.on_yank()
+    end,
+    group = vim.api.nvim_create_augroup("YankHighlight", { clear = true }),
+    pattern = "*",
+})
+
+if not vim.g.lazy_load_on_idle then
+    return
+end
+
 -- lazily load core plugins on startup after init
 local id = vim.api.nvim_create_augroup("LazyLoadAll", { clear = true })
 vim.api.nvim_create_autocmd("User", {
@@ -135,22 +157,4 @@ vim.api.nvim_create_autocmd("User", {
             })
         end)
     end,
-})
-
-vim.api.nvim_create_autocmd("FileChangedShellPost", {
-    callback = function()
-        Notify.warn(
-            "File changed on disk. Buffer reloaded.",
-            { title = "Buffer Reloaded" }
-        )
-    end,
-})
-
--- highlight on yank
-vim.api.nvim_create_autocmd("TextYankPost", {
-    callback = function()
-        vim.hl.on_yank()
-    end,
-    group = vim.api.nvim_create_augroup("YankHighlight", { clear = true }),
-    pattern = "*",
 })

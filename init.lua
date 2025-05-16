@@ -1,6 +1,7 @@
 -- experimental Lua module loader
 vim.loader.enable()
 
+vim.g.lazy_load_on_idle = true
 PLUGINS = "josbritton.plugins"
 Notify = require("josbritton.notify")
 -- start config
