@@ -285,7 +285,7 @@ function M.bufname()
     end
 
     local full_path = vim.fn.expand("%:p") ---@type string
-    local cwd = vim.loop.cwd() or vim.loop.fs_realpath(".") or "" ---@type string
+    local cwd = (vim.uv or vim.loop).cwd() or (vim.uv or vim.loop).fs_realpath(".") or "" ---@type string
 
     if full_path == cwd then
         return ""
