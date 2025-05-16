@@ -201,9 +201,11 @@ return {
     ---@type LazyPluginSpec
     {
         "nvim-lua/plenary.nvim",
+        lazy = true,
     },
     ---@type LazyPluginSpec
     {
         "nvim-tree/nvim-web-devicons",
+        lazy = true,
     },
 }
