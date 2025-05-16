@@ -408,6 +408,13 @@ return {
                 -- },
                 settings = {
                     ["rust-analyzer"] = {
+                        workspace = {
+                            symbol = {
+                                search = {
+                                    scope = "workspace_and_dependencies",
+                                },
+                            },
+                        },
                         check = {
                             command = "clippy", -- Important
                         },
