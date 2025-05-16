@@ -150,5 +150,20 @@ return {
             attach_to_untracked = true,
             word_diff = false,
         })
+
+        MAX_IT = 10
+        local it = 0
+        local timer = vim.uv.new_timer()
+        timer:start(10, 100, function()
+            local ok = vim.g.gitsigns_head
+            if ok and vim.g.gitsigns_head ~= "" then
+                vim.schedule_wrap(vim.api.nvim__redraw)({ statusline = true })
+            end
+            if ok or it > MAX_IT then
+                timer:stop()
+                timer:close()
+            end
+            it = it + 1
+        end)
     end,
 }

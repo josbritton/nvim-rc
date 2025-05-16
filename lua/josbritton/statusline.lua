@@ -11,6 +11,10 @@ local M = {}
 
 vim.opt.laststatus = 3
 
+-- queue gitsigns to be loaded in the background
+-- gitsigns VCS info will be consumed by the statusline UI
+require("lazy").load({ plugins = { "gitsigns.nvim" }, wait = false })
+
 --- @param name string
 --- @return table<string,any>
 local function get_hl(name)
