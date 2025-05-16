@@ -144,7 +144,10 @@ conf["init"] = function()
                 if slash then
                     plugin_name = conf.name or conf[1]:sub(slash + 1)
                 end
-                require("lazy").load({ plugins = { plugin_name } })
+                require("lazy").load({ plugins = { plugin_name }, wait = true })
+                vim.api.nvim_buf_call(ev.buf, function()
+                    require("lir").init()
+                end)
 
                 vim.api.nvim_del_autocmd(ev.id)
                 vim.api.nvim_del_augroup_by_id(ev.group)
