@@ -97,8 +97,17 @@ end
 --- @param active 0|1
 --- @return string
 function M.linter_status(active)
-    ---@type string
-    local ft = vim.bo.filetype
+    local ok, res =
+        pcall(vim.api.nvim_get_option_value, "linter_initialized", { scope = "global" })
+    if not ok or res == false then
+        return ""
+    end
+
+    local ok, ft =
+        pcall(vim.api.nvim_get_option_value, "filetype", { scope = "local", buf = 0 })
+    if not ok then
+        return ""
+    end
 
     ---@type string[]
     local names = {}

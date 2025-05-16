@@ -5,6 +5,9 @@ return {
         "williamboman/mason.nvim",
     },
     event = { "BufReadPre", "BufNewFile" },
+    init = function()
+        vim.g.linter_initialized = false
+    end,
     config = function()
         local lint = require("lint")
 
@@ -24,6 +27,7 @@ return {
                 end
             end,
         })
+        vim.g.linter_initialized = true
 
         -- try once on init
         lint.try_lint()
