@@ -64,6 +64,8 @@ return {
             "Telescope",
         },
         config = function()
+            vim.opt_local.winborder = ""
+
             local actions = require("telescope.actions")
 
             local pickers_new = require("telescope.pickers").new

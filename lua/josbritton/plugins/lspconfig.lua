@@ -284,7 +284,12 @@ local function setup_default_keymaps(ev)
 
     -- opens a popup that displays documentation about the word under your cursor
     --  see `:help K` for why this keymap.
-    nmap("K", vim.lsp.buf.hover, "Hover Documentation", ev.buf)
+    nmap("K", function()
+        ---@type vim.lsp.buf.hover.Opts
+        vim.lsp.buf.hover({
+            border = "single",
+        })
+    end, "Hover Documentation", ev.buf)
 
     nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration", ev.buf)
 end
