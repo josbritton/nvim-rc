@@ -134,6 +134,8 @@ vim.opt.autoread = true
 -- no need to do syntax highlighting past this many cols
 vim.opt.synmaxcol = 400
 
+vim.opt.winborder = "single"
+
 vim.filetype.add({
     extension = {
         mdx = "mdx",
