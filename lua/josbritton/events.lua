@@ -131,7 +131,7 @@ end
 -- lazily load core plugins on startup after init
 local id = vim.api.nvim_create_augroup("LazyLoadAll", { clear = true })
 vim.api.nvim_create_autocmd("User", {
-    pattern = "LazyDone",
+    pattern = "VeryLazy",
     group = id,
     once = true,
     callback = function(_ev)
@@ -154,6 +154,8 @@ vim.api.nvim_create_autocmd("User", {
                     "conform.nvim",
                     "cloak.nvim",
                 },
+                concurrency = math.ceil(vim.uv.available_parallelism() / 8),
+                wait = false,
             })
         end)
     end,
