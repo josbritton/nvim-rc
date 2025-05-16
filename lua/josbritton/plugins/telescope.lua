@@ -192,25 +192,6 @@ return {
                 { desc = "[ ] Find hidden buffers" }
             )
 
-            -- required to build fzf-native
-            assert(
-                vim.fn.executable("gcc") == 1 or vim.fn.executable("clang") == 1,
-                "`gcc` OR `clang` not installed or available."
-            )
-
-            ---@type string[]
-            local required_bins = {
-                "rg", -- required for live-grepping
-                "fd", -- required for finding
-                "make", -- required to build fzf-native
-            }
-            for _i, e in ipairs(required_bins) do
-                assert(
-                    vim.fn.executable(e) == 1,
-                    ("`%s` not installed or available."):format(e)
-                )
-            end
-
             -- fzf *native*
             require("telescope").load_extension("fzf")
         end,

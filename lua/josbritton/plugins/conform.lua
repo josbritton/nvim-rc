@@ -94,19 +94,5 @@ return {
             })
         end
     end,
-    opts = function()
-        ---@type string[]
-        local required_bins = {
-            "stylua",
-            "markdownlint",
-        }
-        for _i, e in ipairs(required_bins) do
-            assert(
-                vim.fn.executable(e) == 1,
-                ("`%s` not installed or available."):format(e)
-            )
-        end
-
-        return opts
-    end,
+    opts = opts,
 }

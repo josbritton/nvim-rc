@@ -324,17 +324,6 @@ return {
         vim.g.rust_analyzer_server_status = {}
     end,
     config = function()
-        ---@type string[]
-        local required_bins = {
-            "rust-analyzer",
-        }
-        for _i, e in ipairs(required_bins) do
-            assert(
-                vim.fn.executable(e) == 1,
-                ("`%s` not installed or available."):format(e)
-            )
-        end
-
         vim.api.nvim_create_autocmd("LspAttach", {
             group = attach_gid,
             callback = function(ev)
