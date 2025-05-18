@@ -152,7 +152,6 @@ vim.api.nvim_create_autocmd("User", {
                     "nvim-lint",
                     "vim-rhubarb",
                     "conform.nvim",
-                    "cloak.nvim",
                 },
                 concurrency = math.ceil(vim.uv.available_parallelism() / 8),
                 wait = false,
