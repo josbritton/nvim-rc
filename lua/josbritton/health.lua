@@ -139,7 +139,8 @@ M.check = function()
 
     vim.health.start("LSP servers")
     check_bins({
-        ["rust-analyzer"] = { "rust-analyzer", "-V" }, -- LSP
+        ["rust-analyzer"] = { "rust-analyzer", "-V" },
+        ["ansible-lint"] = { "ansible-lint", "--version" },
     }, vim.log.levels.WARN)
 
     vim.health.start("Telescope")
