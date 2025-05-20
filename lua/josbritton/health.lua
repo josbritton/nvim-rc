@@ -67,6 +67,21 @@ local function check_bins(bins, level)
     end
 end
 
+M.check_lsp_file_watcher_inotify_backend = function()
+    vim.health.start("LSP: File Watcher")
+    if vim.fn.executable("inotifywatch") == 1 then
+        vim.health.ok(
+            "File watch backend: inotify\nSee :h inotify-limitations for relevant limitations."
+        )
+    else
+        vim.health.info("File watch backend: libuv-watchdirs")
+        vim.health.warn(
+            "libuv-watchdirs has known performance issues.",
+            "Consider installing inotify-tools."
+        )
+    end
+end
+
 M.check_build_fzf_native = function()
     vim.health.start("fzf-native: build")
 
@@ -107,6 +122,7 @@ end
 M.check = function()
     M.check_build_blink_cmp()
     M.check_build_fzf_native()
+    M.check_lsp_file_watcher_inotify_backend()
 
     vim.health.start("Formatters")
     check_bins({
