@@ -1,7 +1,7 @@
 ---@type LazyPluginSpec
 return {
     "lewis6991/gitsigns.nvim",
-    event = { "BufReadPost", "BufNewFile" },
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
         local api = vim.api
         local gitsigns = require("gitsigns")
