@@ -77,7 +77,7 @@ return {
             },
             indent = {
                 enable = true,
-                disable = { "ruby" },
+                disable = { "ruby", "yaml" },
             },
             incremental_selection = {
                 enable = true,
