@@ -14,21 +14,21 @@ return {
         -- override status update calls to redraw the statusline directly
         local gs_update = status.update
         ---@diagnostic disable-next-line: duplicate-set-field
-        status.update = function(self, bufnr, status)
+        status.update = function(bufnr, status)
             if not api.nvim_buf_is_loaded(bufnr) then
                 return
             end
-            gs_update(self, bufnr, status)
+            gs_update(bufnr, status)
             redrawstatus()
         end
 
         local gs_clear = status.clear
         ---@diagnostic disable-next-line: duplicate-set-field
-        status.clear = function(self, bufnr)
+        status.clear = function(bufnr)
             if not api.nvim_buf_is_loaded(bufnr) then
                 return
             end
-            gs_clear(self, bufnr)
+            gs_clear(bufnr)
             redrawstatus()
         end
 
