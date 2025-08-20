@@ -1,5 +1,8 @@
 ---@type LazyPluginSpec
 return {
+    -- wait for resolution of issue #1381
+    commit = "60676707b6a5fa42369e8ff40a481ca45987e0d0",
+
     "lewis6991/gitsigns.nvim",
     event = { "BufReadPre", "BufNewFile" },
     config = function()
@@ -14,21 +17,25 @@ return {
         -- override status update calls to redraw the statusline directly
         local gs_update = status.update
         ---@diagnostic disable-next-line: duplicate-set-field
-        status.update = function(bufnr, status)
+        status.update = function(self, bufnr, status)
+            -- status.update = function(bufnr, status)
             if not api.nvim_buf_is_loaded(bufnr) then
                 return
             end
-            gs_update(bufnr, status)
+            gs_update(self, bufnr, status)
+            -- gs_update(bufnr, status)
             redrawstatus()
         end
 
         local gs_clear = status.clear
         ---@diagnostic disable-next-line: duplicate-set-field
-        status.clear = function(bufnr)
+        status.clear = function(self, bufnr)
+            -- status.clear = function(bufnr)
             if not api.nvim_buf_is_loaded(bufnr) then
                 return
             end
-            gs_clear(bufnr)
+            gs_clear(self, bufnr)
+            -- gs_clear(bufnr)
             redrawstatus()
         end
 
