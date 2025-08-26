@@ -288,6 +288,11 @@ local function setup_default_keymaps(ev)
         ---@type vim.lsp.buf.hover.Opts
         vim.lsp.buf.hover({
             border = "single",
+            close_events = {
+                "BufLeave",
+                "CursorMoved",
+                "InsertEnter",
+            },
         })
     end, "Hover Documentation", ev.buf)
 
