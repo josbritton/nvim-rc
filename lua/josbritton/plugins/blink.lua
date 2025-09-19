@@ -184,6 +184,13 @@ return {
                         return { "lazydev", "lsp", "path", "snippets" }
                     end
 
+                    if
+                        vim.bo.filetype == "toml"
+                        and vim.endswith(vim.fn.bufname(), "Cargo.toml")
+                    then
+                        return { "cargo", "lsp", "path", "snippets" }
+                    end
+
                     return { "lsp", "path", "snippets" }
                 end,
                 providers = {
@@ -191,6 +198,11 @@ return {
                         name = "LazyDev",
                         module = "lazydev.integrations.blink",
                         score_offset = 100,
+                    },
+                    cargo = {
+                        name = "Cargo",
+                        module = CARGOMOD,
+                        score_offset = -100,
                     },
                 },
             },

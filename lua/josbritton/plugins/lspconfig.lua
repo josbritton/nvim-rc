@@ -282,20 +282,6 @@ local function setup_default_keymaps(ev)
     -- or a suggestion from your LSP for this to activate.
     nmap("<leader>ca", vim.lsp.buf.code_action, "LSP: [C]ode [A]ction", ev.buf)
 
-    -- opens a popup that displays documentation about the word under your cursor
-    --  see `:help K` for why this keymap.
-    nmap("K", function()
-        ---@type vim.lsp.buf.hover.Opts
-        vim.lsp.buf.hover({
-            border = "single",
-            close_events = {
-                "BufLeave",
-                "CursorMoved",
-                "InsertEnter",
-            },
-        })
-    end, "Hover Documentation", ev.buf)
-
     nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration", ev.buf)
 end
 
@@ -317,6 +303,22 @@ local function setup_keymaps(ev, client)
             "Workspace [S]ymbols",
             ev.buf
         )
+    end
+
+    if client.name ~= "taplo" then
+        -- opens a popup that displays documentation about the word under your cursor
+        --  see `:help K` for why this keymap.
+        nmap("K", function()
+            ---@type vim.lsp.buf.hover.Opts
+            vim.lsp.buf.hover({
+                border = "single",
+                close_events = {
+                    "BufLeave",
+                    "CursorMoved",
+                    "InsertEnter",
+                },
+            })
+        end, "Hover Documentation", ev.buf)
     end
 end
 
@@ -518,10 +520,15 @@ return {
                         cargo = {
                             -- pass `--all-features` to cargo commands
                             features = "all",
+                            -- RA needs to build for diagnostics
+                            --   build in a different subdir of `target` to prevent locking any other builds
                             targetDir = true,
                         },
                     },
                 },
+            },
+            taplo = {
+                cmd = { "taplo", "lsp", "-c", "~/.config/taplo.toml", "stdio" },
             },
         }
 

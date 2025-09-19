@@ -3,6 +3,7 @@ vim.loader.enable()
 
 vim.g.lazy_load_on_idle = true
 PLUGINS = "josbritton.plugins"
+CARGOMOD = "josbritton.cargo"
 Notify = require("josbritton.notify")
 -- start config
 require("josbritton.options")
