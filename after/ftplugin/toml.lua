@@ -18,13 +18,14 @@ local function do_hover(cword, buf_pos, s)
     local hl_ns = vim.api.nvim_create_namespace("cargohover")
     if cword ~= "" then
         local line = vim.api.nvim_buf_get_lines(buf, buf_pos[1] - 1, buf_pos[1], false)
-        local offset = vim.fn.match(line, cword)
+        local offset =
+            vim.fn.match(line[1], cword, math.max(buf_pos[2] - string.len(cword), 0))
         vim.hl.range(
             buf,
             hl_ns,
             "LspReferenceText",
             { buf_pos[1] - 1, offset },
-            { buf_pos[1] - 1, string.len(cword) },
+            { buf_pos[1] - 1, offset + string.len(cword) },
             { inclusive = false, timeout = -1 }
         )
     end
