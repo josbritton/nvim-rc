@@ -126,6 +126,7 @@ function source:get_completions(ctx, callback)
         "tree",
         "--prefix",
         "none",
+        "--workspace",
         "--frozen",
         "--target",
         "all",
