@@ -55,6 +55,46 @@ vim.api.nvim_create_autocmd({ "VimResized" }, {
     end,
 })
 
+-- unload buffers went sent to background (preserves much of the state)
+vim.go.hidden = false
+-- remove oldest buffers beyond threshold keeping N buffers alive
+vim.api.nvim_create_autocmd("BufHidden", {
+    callback = function(ev)
+        N = 5
+        ---@param bufnr integer
+        ---@return boolean
+        local count = 0
+        local bufnrs = vim.tbl_filter(function(bufnr)
+            -- ignore buffers that are not loaded
+            if not vim.api.nvim_buf_is_loaded(bufnr) then
+                return false
+            end
+            -- ignore invalid buffer ids
+            if 1 ~= vim.fn.buflisted(bufnr) then
+                return false
+            end
+            -- ignore buffers that are already open
+            if vim.fn.bufwinnr(bufnr) > -1 then
+                return false
+            end
+
+            count = count + 1
+            return true
+        end, vim.api.nvim_list_bufs())
+
+        if count > N then
+            table.sort(bufnrs, function(a, b)
+                return vim.fn.getbufinfo(a)[1].lastused < vim.fn.getbufinfo(b)[1].lastused
+            end)
+
+            -- try to clear all but the last N buffers
+            local _ok, _ = pcall(vim.cmd.bdelete, table.concat(bufnrs, " ", 1, count - N))
+            -- local _ok, _ = pcall(vim.cmd.bunload, table.concat(bufnrs, " ", 1, count - N))
+            -- local _ok, _ = pcall(vim.cmd.bwipeout, table.concat(bufnrs, " ", 1, count - N))
+        end
+    end,
+})
+
 -- global statusline
 vim.opt.laststatus = 3
 
