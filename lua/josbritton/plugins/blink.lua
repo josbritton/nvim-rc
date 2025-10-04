@@ -1,6 +1,49 @@
 return {
     ---@type LazyPluginSpec
     {
+        "saghen/blink.indent",
+        --- @module "blink.indent"
+        event = { "BufReadPre", "BufNewFile", "FileReadPre" },
+        --- @type blink.indent.Config
+        opts = {
+            -- or disable with `vim.g.indent_guide = false` (global)
+            --      `vim.b.indent_guide = false` (per-buffer)
+            blocked = {
+                buftypes = { "terminal", "quickfix", "nofile", "prompt" },
+                filetypes = {
+                    "", -- intentional
+                    "lspinfo",
+                    "packer",
+                    "checkhealth",
+                    "help",
+                    "man",
+                    "gitcommit",
+                    "TelescopePrompt",
+                    "TelescopeResults",
+                    "dashboard",
+                    "lir",
+                },
+            },
+            static = {
+                enabled = true,
+                char = "│",
+                priority = 1,
+                highlights = { "BlinkIndent" },
+            },
+            scope = {
+                enabled = true,
+                char = "│",
+                priority = 145, -- should be less than diagnostics
+                highlights = { "BlinkIndentScope" },
+                underline = {
+                    enabled = true,
+                    highlights = { "BlinkIndentUnderline" },
+                },
+            },
+        },
+    },
+    ---@type LazyPluginSpec
+    {
         "saghen/blink.pairs",
         event = "InsertEnter",
         version = false, -- use latest commit

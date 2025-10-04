@@ -423,6 +423,10 @@ function M:load()
     hl("BlinkCmpSignatureHelpBorder", { link = "NormalFloat" })
     hl("BlinkCmpSignatureHelpActiveParameter", { link = "LspSignatureActiveParameter" })
 
+    hl("BlinkIndent", { fg = C.fg4, bg = "NONE", nocombine = true })
+    hl("BlinkIndentScope", muted)
+    hl("BlinkIndentUnderline", { fg = "NONE", sp = C.fg3, underline = true })
+
     hl("CmpItemAbbrDeprecated", { strikethrough = true })
     hl("CmpItemKindStruct", { fg = C.yellow2 })
     hl("CmpItemKindFunction", text_blue)
