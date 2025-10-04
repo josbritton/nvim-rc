@@ -98,9 +98,11 @@ vim.api.nvim_create_autocmd("BufHidden", {
 -- global statusline
 vim.opt.laststatus = 3
 
--- hybrid line numbers
+-- line numbers
 vim.opt.number = true
-vim.opt.relativenumber = true
+vim.opt.relativenumber = false
+vim.o.cursorline = true
+vim.o.cursorlineopt = "number"
 
 vim.opt.mouse = "a"
 
