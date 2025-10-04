@@ -67,7 +67,7 @@ vim.api.nvim_create_autocmd("BufHidden", {
         N = 5
         ---@param bufnr integer
         ---@return boolean
-        local count = 0
+        local count = 1
         local bufnrs = vim.tbl_filter(function(bufnr)
             -- ignore buffers that are not loaded
             if not vim.api.nvim_buf_is_loaded(bufnr) then
@@ -79,6 +79,10 @@ vim.api.nvim_create_autocmd("BufHidden", {
             end
             -- ignore buffers that are already open
             if vim.fn.bufwinnr(bufnr) > -1 then
+                return false
+            end
+            -- ignore buffer to be hidden
+            if bufnr == ev.buf then
                 return false
             end
 
