@@ -588,14 +588,15 @@ return {
         })
 
         ---@param server_name string
-        ---@param server_list table<string, table>
+        ---@param server_list table<string, vim.lsp.Config>
         local function setup_lsp_server(server_name, server_list)
             local server = server_list[server_name] or {}
             -- this handles overriding only values explicitly passed
             -- by the server configuration above
             server.capabilities =
                 vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-            require("lspconfig")[server_name].setup(server)
+            vim.lsp.config(server_name, server)
+            vim.lsp.enable(server_name)
         end
 
         local function mason_server_handler(mason_server_name)
