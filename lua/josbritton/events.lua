@@ -106,7 +106,9 @@ vim.api.nvim_create_autocmd({ "BufReadPost" }, {
     end,
 })
 
+local gid = vim.api.nvim_create_augroup("AutoBufReloader", { clear = true })
 vim.api.nvim_create_autocmd("FileChangedShellPost", {
+    group = gid,
     callback = function()
         Notify.warn(
             "File changed on disk. Buffer reloaded.",
@@ -116,11 +118,12 @@ vim.api.nvim_create_autocmd("FileChangedShellPost", {
 })
 
 -- highlight on yank
+local gid = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
     callback = function()
         vim.hl.on_yank()
     end,
-    group = vim.api.nvim_create_augroup("YankHighlight", { clear = true }),
+    group = gid,
     pattern = "*",
 })
 

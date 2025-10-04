@@ -13,9 +13,11 @@ return {
     event = { "BufReadPre", "BufNewFile" },
     cmd = { "ConformInfo" },
     init = function()
+        local gid = vim.api.nvim_create_augroup("AutoFormatGroup", { clear = true })
         for ft, _ in pairs(opts["formatters_by_ft"] or {}) do
             vim.api.nvim_create_autocmd({ "FileType" }, {
                 pattern = ft,
+                group = gid,
                 callback = function(ev)
                     ---@type function
                     local enable_autoformatting
@@ -38,6 +40,7 @@ return {
                     ---@return number # The ID number of the autocommand that was just created
                     enable_autoformatting = function()
                         return vim.api.nvim_create_autocmd("BufWritePre", {
+                            group = gid,
                             buffer = ev.buf,
                             callback = function(ev)
                                 require("conform").format({

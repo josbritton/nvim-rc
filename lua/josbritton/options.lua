@@ -8,7 +8,9 @@ vim.g.maplocalleader = ","
 vim.opt.timeoutlen = 1000
 
 -- override formatoptions for all buffers
+local gid = vim.api.nvim_create_augroup("FormatOptionForcer", { clear = true })
 vim.api.nvim_create_autocmd("BufEnter", {
+    group = gid,
     callback = function()
         -- do not automatically insert current comment leader after
         -- hitting 'o' or 'O' in normal mode
@@ -58,7 +60,9 @@ vim.api.nvim_create_autocmd({ "VimResized" }, {
 -- unload buffers went sent to background (preserves much of the state)
 vim.go.hidden = false
 -- remove oldest buffers beyond threshold keeping N buffers alive
+local gid = vim.api.nvim_create_augroup("HiddenBufCleaner", { clear = true })
 vim.api.nvim_create_autocmd("BufHidden", {
+    group = gid,
     callback = function(ev)
         N = 5
         ---@param bufnr integer
