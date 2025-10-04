@@ -1,4 +1,4 @@
-vim.g.lazy_load_on_idle = true
+vim.g.lazy_load_on_idle = false
 PLUGINS = "josbritton.plugins"
 CARGOMOD = "josbritton.cargo"
 Notify = require("josbritton.notify")

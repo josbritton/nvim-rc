@@ -16,7 +16,13 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup(PLUGINS, {
     install = { missing = false },
-    checker = { enabled = true, notify = false },
+    checker = {
+        -- disable automatic network activity
+        enabled = false,
+        notify = false,
+        concurrency = math.ceil(vim.uv.available_parallelism() / 2),
+    },
     change_detection = { notify = false },
     rocks = { enabled = false },
+    concurrency = math.ceil(vim.uv.available_parallelism() / 2),
 })
