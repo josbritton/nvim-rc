@@ -141,7 +141,6 @@ vim.api.nvim_create_autocmd("User", {
         vim.schedule(function()
             require("lazy").load({
                 plugins = {
-                    "nvim-treesitter",
                     "nvim-lspconfig",
                     "blink.cmp",
                     "nvim-dap",
