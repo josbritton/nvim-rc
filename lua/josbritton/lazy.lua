@@ -15,7 +15,7 @@ end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup(PLUGINS, {
-    install = { missing = false },
+    install = { missing = true },
     checker = {
         -- disable automatic network activity
         enabled = false,

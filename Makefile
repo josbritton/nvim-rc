@@ -7,6 +7,12 @@ GIT_DIR := $(shell git rev-parse --git-dir)
 clean:
 	(. .venv/bin/activate && pre-commit uninstall) || true
 	rm -rf .venv/
+	rm -rf ~/.local/share/nvim/lazy
+	rm -rf ~/.local/share/nvim/site
+	rm -rf ~/.local/share/nvim/tree-sitter-*
+	rm -rf ~/.local/share/mason
+	rm -rf ~/.local/state/nvim/lazy/*
+	rm -rf ~/.local/state/blink
 
 .PHONY: lint
 lint:
@@ -20,6 +26,7 @@ format:
 
 .PHONY: install
 install: $(GIT_DIR)/hooks/pre-commit
+	nvim --headless "+Lazy! restore" +qa
 
 .venv/lock: requirements.txt
 	python3 -m venv .venv/
