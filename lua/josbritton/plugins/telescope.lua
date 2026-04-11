@@ -162,6 +162,16 @@ return {
 
             require("telescope").setup({
                 defaults = {
+                    vimgrep_arguments = {
+                        "rg",
+                        "--color=never", -- telescope does not yet interpret color codes
+                        "--no-heading",    -- 1. Needed for correct output formatting
+                        "--with-filename", -- 2.
+                        "--line-number",   -- 3.
+                        "--column",        -- 4.
+                        "--smart-case",    -- 5.
+                        "--hidden",
+                    },
                     mappings = {
                         i = {
                             ["<C-u>"] = false, -- half-screen movement (up)
