@@ -530,6 +530,15 @@ return {
             taplo = {
                 cmd = { "taplo", "lsp", "-c", "~/.config/taplo.toml", "stdio" },
             },
+            texlab = {
+                build = {
+                    onSave = true,
+                },
+                chktex = {
+                    onOpenAndSave = true,
+                    onEdit = true,
+                },
+            },
         }
 
         ---@type table<string, vim.lsp.Config>
