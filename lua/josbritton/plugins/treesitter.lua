@@ -18,7 +18,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
         local start = function()
             if vim.api.nvim_buf_is_valid(ev.buf) then
-                vim.treesitter.start(ev.buf)
+                local _ok, _err = pcall(vim.treesitter.start, ev.buf, lang)
             end
         end
 
