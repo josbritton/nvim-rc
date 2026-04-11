@@ -113,7 +113,6 @@ vim.keymap.set("x", "<leader>s", function()
     local mode = vim.fn.mode()
 
     -- must exit visual mode before continuing
-    -- local esc = vim.api.nvim_replace_termcodes("<Esc>", true, false, true)
     vim.api.nvim_feedkeys(termcode.esc, "nx", false)
 
     local marks = { "<", ">" }
