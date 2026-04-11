@@ -507,6 +507,9 @@ return {
                             },
                         },
                         diagnostics = {
+                            disabled = {
+                                "unlinked-file",
+                            },
                             styleLints = {
                                 enable = true,
                             },
