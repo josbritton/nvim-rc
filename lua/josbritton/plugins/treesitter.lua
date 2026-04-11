@@ -40,6 +40,9 @@ return {
                 branch = "main",
             },
         },
+        opts = {
+            install_dir = vim.fn.stdpath("state") .. "/site",
+        },
         branch = "main",
         lazy = false,
         build = ":TSUpdate",

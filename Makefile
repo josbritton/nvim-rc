@@ -12,6 +12,8 @@ clean:
 	rm -rf ~/.local/share/nvim/tree-sitter-*
 	rm -rf ~/.local/share/mason
 	rm -rf ~/.local/state/nvim/lazy/*
+	rm -rf ~/.local/state/nvim/lazydata/*
+	rm -rf ~/.local/state/nvim/site/*
 	rm -rf ~/.local/state/blink
 
 .PHONY: lint
