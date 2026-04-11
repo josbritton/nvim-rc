@@ -57,8 +57,16 @@ vim.api.nvim_create_autocmd({ "VimResized" }, {
     end,
 })
 
--- *mostly* unload hidden buffers to minimize resource usage
-vim.go.hidden = false
+-- unload buffers that will be hidden to minimize resource usage
+-- unfortunately `false` prevents hiding a buffer that cannot be unloaded (e.g., dirty)
+vim.go.hidden = true
+local gid = vim.api.nvim_create_augroup("BufHiddenUnloader", { clear = true })
+vim.api.nvim_create_autocmd({ "BufHidden" }, {
+    group = gid,
+    callback = vim.schedule_wrap(function(ev)
+        local _ok, _err = pcall(vim.cmd.bunload, ev.buf)
+    end),
+})
 
 -- global statusline
 vim.opt.laststatus = 3
