@@ -22,6 +22,11 @@ require("lazy").setup(PLUGINS, {
         notify = false,
         concurrency = math.ceil(vim.uv.available_parallelism() / 2),
     },
+    dev = {
+        ---@type string | fun(plugin: LazyPlugin): string
+        path = "~/Sync",
+        fallback = true,
+    },
     change_detection = { notify = false },
     rocks = { enabled = false },
     concurrency = math.ceil(vim.uv.available_parallelism() / 2),

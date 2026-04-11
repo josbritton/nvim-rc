@@ -2,7 +2,11 @@
 local conf = {
     "tamago324/lir-git-status.nvim",
     dependencies = {
-        "JosBritton/lir.nvim",
+        {
+            -- dir = "~/Sync/lir.nvim",
+            "JosBritton/lir.nvim",
+            dev = true,
+        },
     },
     lazy = true,
     keys = {
