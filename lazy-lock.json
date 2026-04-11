@@ -1,6 +1,7 @@
 {
   "Comment.nvim": { "branch": "master", "commit": "e30b7f2008e52442154b66f7c519bfd2f1e32acb" },
   "LuaSnip": { "branch": "master", "commit": "458560534a73f7f8d7a11a146c801db00b081df0" },
+  "aerial.nvim": { "branch": "master", "commit": "645d108a5242ec7b378cbe643eb6d04d4223f034" },
   "ansible-vim": { "branch": "master", "commit": "6718ff81fe36f5f4fbf6675d95b16e4a74814827" },
   "blink.cmp": { "branch": "main", "commit": "a999ddca2f629faf8a554a8fff904931935a7b1c" },
   "blink.indent": { "branch": "main", "commit": "fcc03b8ae171e363b3853d1002cd156270f6e5ac" },
