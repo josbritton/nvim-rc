@@ -144,6 +144,7 @@ vim.opt.synmaxcol = 400
 vim.opt.winborder = "single"
 
 vim.filetype.add({
+    -- extension and filename keys are matched as literal strings
     extension = {
         mdx = "mdx",
         conf = "conf",
@@ -152,7 +153,11 @@ vim.filetype.add({
         [".yamllint"] = "yaml",
         ["Chart.lock"] = "yaml",
     },
+    -- note: these are LUA patterns, lua's escape char = %
     pattern = {
+        [".*/zsh/profile"] = "zsh",
+        [".*/zsh/rc"] = "zsh",
+        [".*/zsh/env"] = "zsh",
         ["${HOME}/%.config/yamllint/config"] = "yaml",
         ["${XDG_CONFIG_HOME}/yamllint/config"] = "yaml",
         ["${HOME}/%.config/git/config"] = "gitconfig",
