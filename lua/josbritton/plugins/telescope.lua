@@ -162,6 +162,7 @@ return {
 
             require("telescope").setup({
                 defaults = {
+                    -- stylua: ignore
                     vimgrep_arguments = {
                         "rg",
                         "--color=never", -- telescope does not yet interpret color codes
