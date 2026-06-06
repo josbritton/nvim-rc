@@ -4,6 +4,7 @@ return {
         "nvim-telescope/telescope.nvim",
         branch = "master",
         dependencies = {
+            "nvim-telescope/telescope-live-grep-args.nvim",
             -- build and make available C port of fzf for telescope
             -- (does not require fzf to be installed on the system)
             {
@@ -22,6 +23,11 @@ return {
         keys = {
             {
                 "<C-k>",
+                nil,
+                desc = "[ ] Find hidden buffers",
+            },
+            {
+                "<leader>fg",
                 nil,
                 desc = "[ ] Find hidden buffers",
             },
@@ -181,6 +187,18 @@ return {
                         },
                     },
                 },
+                extensions = {
+                    live_grep_args = {
+                        auto_quoting = true,
+                        mappings = {
+                            i = {
+                                ["<C-u>"] = false, -- half-screen movement (up)
+                                ["<C-d>"] = false, -- half-screen movement (down)
+                                ["<esc>"] = actions.close, -- map ESC to quit in insert mode
+                            },
+                        },
+                    },
+                },
                 pickers = {
                     find_files = {
                         -- default picker ignores fd ignore file
@@ -199,9 +217,14 @@ return {
                 vim.schedule_wrap(hidden_buffers),
                 { desc = "[ ] Find hidden buffers" }
             )
+            vim.keymap.set(
+                "n",
+                "<leader>fg",
+                ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>"
+            )
 
-            -- fzf *native*
-            require("telescope").load_extension("fzf")
+            require("telescope").load_extension("fzf") -- fzf *native*
+            require("telescope").load_extension("live_grep_args")
         end,
     },
     ---@type LazyPluginSpec
