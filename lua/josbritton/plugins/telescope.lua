@@ -178,6 +178,11 @@ return {
                         "--column",        -- 4.
                         "--smart-case",    -- 5.
                         "--hidden",
+                        "--no-ignore",
+                        "--iglob=!.git",
+                        "--iglob=!.venv",
+                        "--iglob=!venv",
+                        "--iglob=!node_modules",
                     },
                     mappings = {
                         i = {
