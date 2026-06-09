@@ -114,7 +114,7 @@ local conf = {
 
         vim.keymap.set("n", "<leader>pv", function()
             local ft = vim.bo.filetype
-            if ft == "lir" or ft == "fugitive" then
+            if ft == "lir" then
                 return
             end
 
@@ -122,6 +122,16 @@ local conf = {
             local from = { vim.fn.bufnr("%"), vim.fn.line("."), vim.fn.col("."), 0 }
             local items = { { tagname = vim.fn.expand("<cword>"), from = from } }
             vim.fn.settagstack(vim.fn.win_getid(), { items = items }, "t")
+
+            if ft == "fugitive" then
+                local cwd = (vim.uv or vim.loop).cwd()
+                    or (vim.uv or vim.loop).fs_realpath(".")
+                    or nil ---@type string?
+                if cwd then
+                    vim.cmd.edit(cwd)
+                end
+                return
+            end
 
             vim.cmd.edit("%:h")
         end, {
