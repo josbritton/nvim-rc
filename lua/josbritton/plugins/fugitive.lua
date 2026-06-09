@@ -34,7 +34,7 @@ return {
         "GBrowse",
     },
     keys = {
-        { "<leader>gs", "<cmd>Git<cr>", desc = "[G]it [S]tatus" },
+        { "<leader>gs", "<cmd>Gedit :<cr>", desc = "[G]it fugitive [S]ummary" },
         { "<leader>gb", "<cmd>GBrowse<cr>", desc = "[G]it [B]rowse" },
         { "<leader>gd", "<cmd>Gvdiffsplit!<cr>", desc = "[G]it [D]iff split" },
     },
