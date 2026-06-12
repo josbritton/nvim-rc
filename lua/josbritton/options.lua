@@ -156,6 +156,7 @@ vim.filetype.add({
     extension = {
         mdx = "mdx",
         conf = "conf",
+        json5 = "jsonc",
     },
     filename = {
         [".yamllint"] = "yaml",
