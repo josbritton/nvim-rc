@@ -2,9 +2,10 @@
 .DEFAULT_GOAL := install
 
 GIT_DIR := $(shell git rev-parse --git-dir)
+TEMP_FILE := $(shell mktemp)
 
 .PHONY: clean
-clean:
+clean: truncate-logs
 	(. .venv/bin/activate && pre-commit uninstall) || true
 	rm -rf .venv/
 	rm -rf ~/.local/share/nvim/lazy
@@ -45,3 +46,10 @@ $(GIT_DIR)/hooks/pre-commit: .pre-commit-config.yaml .venv/lock
 
 .gitignore:
 	touch .gitignore
+
+.PHONY: truncate-logs
+truncate-logs:
+	[ -e ~/.local/state/nvim/lsp.log ] || touch ~/.local/state/nvim/lsp.log
+	tail -c 1M ~/.local/state/nvim/lsp.log > $(TEMP_FILE)
+	cp $(TEMP_FILE) ~/.local/state/nvim/lsp.log
+	rm -f $(TEMP_FILE)
