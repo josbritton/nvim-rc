@@ -586,6 +586,9 @@ return {
                     },
                 },
             },
+            ansiblels = {
+                filetypes = { "ansible" },
+            },
         }
 
         require("mason").setup({
