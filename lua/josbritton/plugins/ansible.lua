@@ -2,7 +2,7 @@
 return {
     "pearofducks/ansible-vim",
     dependencies = {
-        "nvim-telescope/telescope.nvim",
+        "nvim-treesitter",
     },
     ft = { "ansible", "jinja2" },
     lazy = true,
