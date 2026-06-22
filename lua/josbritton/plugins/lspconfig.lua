@@ -611,18 +611,15 @@ return {
             vim.lsp.enable(server_name)
         end
 
-        local function mason_server_handler(mason_server_name)
-            setup_lsp_server(mason_server_name, mason_servers)
-        end
-
         -- installs packages to:
         -- ~/.local/share/nvim/mason/packages
         require("mason-lspconfig").setup({
             ensure_installed = vim.tbl_keys(mason_servers or {}),
-            handlers = {
-                mason_server_handler,
-            },
+            automatic_enable = false,
         })
+        for k, _v in pairs(mason_servers or {}) do
+            setup_lsp_server(k, mason_servers or {})
+        end
         for k, _v in pairs(system_servers or {}) do
             setup_lsp_server(k, system_servers or {})
         end
