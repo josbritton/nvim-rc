@@ -6,6 +6,9 @@ return {
     },
     ft = { "ansible", "jinja2" },
     lazy = true,
+    init = function()
+        vim.g.ansible_unindent_after_newline = 0
+    end,
     config = function()
         local ts = require("nvim-treesitter")
 
