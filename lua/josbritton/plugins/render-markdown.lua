@@ -11,6 +11,14 @@ return {
         ---@module 'render-markdown'
         ---@type render.md.UserConfig
         local opts = {
+            enabled = false,
+            overrides = {
+                buftype = {
+                    nofile = {
+                        enabled = true,
+                    },
+                },
+            },
             html = {
                 tag = {
                     code = {
